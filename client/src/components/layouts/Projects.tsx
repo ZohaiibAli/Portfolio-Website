@@ -62,32 +62,9 @@ function ParticleField() {
 }
 
 // ✅ CONFIGURE YOUR PROJECTS HERE
+// Order matches the resume: HelpGhar -> AI Dataset Cleaner -> ServiceHub
 // Each project can have: liveDemo (optional), github (optional), or both
 const projects: Project[] = [
-  {
-    name: "ServiceHub",
-    subtitle: "Role-Based & Real-Time System",
-    description: "Full-stack service marketplace connecting seekers and providers with secure three-role auth (Admin, Seeker, Provider), real-time WebSocket chat, and H3 geospatial indexing for radius-based discovery.",
-    gradient: "linear-gradient(135deg, #071a12 0%, #0a2018 40%, #0d2d22 100%)",
-    accent: "#10B981",
-    accentGlow: "rgba(16,185,129,0.28)",
-    tags: ["React.js", "Node.js", "Express.js", "PostgreSQL", "WebSockets", "H3"],
-    icon: "⬡",
-    liveDemo: "https://frontend-pro-battle26-stage3.vercel.app/login",
-    github: null, // No github link for this one
-  },
-  {
-    name: "Student Score Predictor",
-    subtitle: "Machine Learning Web Application",
-    description: "ML-powered academic performance predictor using study hours, attendance, and classroom participation as features, with a React.js + Tailwind CSS frontend and FastAPI backend for seamless real-time predictions.",
-    gradient: "linear-gradient(135deg, #07101a 0%, #0a1828 40%, #0d2040 100%)",
-    accent: "#06B6D4",
-    accentGlow: "rgba(6,182,212,0.28)",
-    tags: ["React.js", "FastAPI", "Tailwind CSS", "Machine Learning"],
-    icon: "◈",
-    liveDemo: "https://students-prediction-model.vercel.app/",
-    github: null, // Add GitHub URL here if needed
-  },
   {
     name: "HelpGhar",
     subtitle: "Home Services Marketplace Platform",
@@ -99,6 +76,30 @@ const projects: Project[] = [
     icon: "⬟",
     liveDemo: "https://help-ghar-beta.vercel.app/",
     github: null,
+  },
+  {
+    name: "AI Dataset Cleaner",
+    subtitle: "Data Preprocessing & Analysis Tool",
+    description: "Streamlit-based web application to streamline dataset cleaning and analysis, handling missing values, duplicates, outliers, and inconsistencies with automated multi-strategy imputation and a recommendation engine.",
+    gradient: "linear-gradient(135deg, #1a1207 0%, #281a0a 40%, #40260d 100%)",
+    accent: "#F59E0B",
+    accentGlow: "rgba(245,158,11,0.28)",
+    tags: ["Streamlit", "Python", "Pandas", "Data Cleaning"],
+    icon: "◆",
+    liveDemo: null, // TODO: add your AI Dataset Cleaner live demo URL here
+    github: null,
+  },
+  {
+    name: "ServiceHub",
+    subtitle: "Role-Based & Real-Time System",
+    description: "Full-stack service marketplace connecting seekers and providers with secure three-role auth (Admin, Seeker, Provider), real-time WebSocket chat, and H3 geospatial indexing for radius-based discovery.",
+    gradient: "linear-gradient(135deg, #071a12 0%, #0a2018 40%, #0d2d22 100%)",
+    accent: "#10B981",
+    accentGlow: "rgba(16,185,129,0.28)",
+    tags: ["React.js", "Node.js", "Express.js", "PostgreSQL", "WebSockets", "H3"],
+    icon: "⬡",
+    liveDemo: "https://frontend-pro-battle26-stage3.vercel.app/login",
+    github: null, // No github link for this one
   },
 ];
 
