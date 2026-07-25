@@ -90,10 +90,12 @@ function ParticleField() {
   );
 }
 
+// ✅ Matches the "Technical Skills" section of the resume
 const skills = [
+  // Programming Languages
   {
     name: "JavaScript",
-    description: "Strict typing, generics & compiler-driven correctness at scale",
+    description: "Core language for dynamic, interactive web applications",
     icon: "JS",
     color: "#F59E0B",
     glow: "rgba(245,158,11,0.25)",
@@ -106,12 +108,28 @@ const skills = [
     glow: "rgba(59,130,246,0.25)",
   },
   {
-    name: "React",
+    name: "Python",
+    description: "Backend services, data preprocessing & ML pipelines",
+    icon: "Py",
+    color: "#FBBF24",
+    glow: "rgba(251,191,36,0.25)",
+  },
+  // Frontend
+  {
+    name: "React.js",
     description: "Declarative UI architecture with hooks, context & concurrent mode",
     icon: "Re",
     color: "#22D3EE",
     glow: "rgba(34,211,238,0.25)",
   },
+  {
+    name: "Tailwind CSS",
+    description: "Utility-first styling for fast, consistent, responsive UI",
+    icon: "Tw",
+    color: "#38BDF8",
+    glow: "rgba(56,189,248,0.25)",
+  },
+  // Backend
   {
     name: "Node.js",
     description: "Event-driven server runtime powering high-throughput APIs",
@@ -121,11 +139,19 @@ const skills = [
   },
   {
     name: "Express.js",
-    description: "Event-driven server runtime powering high-throughput APIs",
+    description: "Minimal, unopinionated framework for RESTful Node.js APIs",
     icon: "Ex",
     color: "#3444d3",
     glow: "rgba(52, 113, 211, 0.25)",
   },
+  {
+    name: "FastAPI",
+    description: "High-performance Python APIs with async support & auto docs",
+    icon: "Fa",
+    color: "#10B981",
+    glow: "rgba(16,185,129,0.25)",
+  },
+  // Databases
   {
     name: "MongoDB",
     description: "Document-oriented database with horizontal scaling and flexible schema",
@@ -133,7 +159,28 @@ const skills = [
     color: "#81f89f",
     glow: "rgba(61, 122, 42, 0.25)",
   },
-  
+  {
+    name: "PostgreSQL",
+    description: "Relational database with strong consistency & geospatial support",
+    icon: "Pg",
+    color: "#818CF8",
+    glow: "rgba(129,140,248,0.25)",
+  },
+  // AI/ML
+  {
+    name: "Machine Learning",
+    description: "Model training & inference with scikit-learn for real-world data",
+    icon: "ML",
+    color: "#F472B6",
+    glow: "rgba(244,114,182,0.25)",
+  },
+  {
+    name: "RAG Pipelines",
+    description: "Retrieval-augmented generation with vector embeddings & semantic search",
+    icon: "RAG",
+    color: "#A78BFA",
+    glow: "rgba(167,139,250,0.25)",
+  },
 ];
 
 function SkillCard({
@@ -437,7 +484,7 @@ export default function SkillsSection(): JSX.Element {
           transition={{ delay: 0.9 }}
           className="flex flex-wrap gap-2 justify-center mt-14"
         >
-          {["REST", "GraphQL", "WebSockets", "CI/CD"].map((tag, i) => (
+          {["RESTful APIs", "WebSockets", "Git & GitHub", "Agile Development"].map((tag, i) => (
             <motion.span
               key={tag}
               initial={{ opacity: 0, scale: 0.85 }}
