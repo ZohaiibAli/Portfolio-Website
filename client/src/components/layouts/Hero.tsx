@@ -37,10 +37,10 @@ function useTypingEffect(texts: string[], speed = 60, pause = 1800) {
 
 // ─── Animated code block ─────────────────────────────────────────────────────
 const codeLines = [
-  { tokens: [{ t: "const ", c: "#7C3AED" }, { t: "architect", c: "#60A5FA" }, { t: " = {", c: "#E2E8F0" }] },
-  { tokens: [{ t: "  stack", c: "#34D399" }, { t: ": [", c: "#E2E8F0" }, { t: '"TypeScript"', c: "#FCD34D" }, { t: ", ", c: "#E2E8F0" }, { t: '"Rust"', c: "#FCD34D" }, { t: ", ", c: "#E2E8F0" }, { t: '"Go"', c: "#FCD34D" }, { t: "],", c: "#E2E8F0" }] },
-  { tokens: [{ t: "  systems", c: "#34D399" }, { t: ": ", c: "#E2E8F0" }, { t: '"distributed"', c: "#FCD34D" }, { t: ",", c: "#E2E8F0" }] },
-  { tokens: [{ t: "  obsession", c: "#34D399" }, { t: ": ", c: "#E2E8F0" }, { t: '"performance"', c: "#FCD34D" }, { t: ",", c: "#E2E8F0" }] },
+  { tokens: [{ t: "const ", c: "#7C3AED" }, { t: "developer", c: "#60A5FA" }, { t: " = {", c: "#E2E8F0" }] },
+  { tokens: [{ t: "  stack", c: "#34D399" }, { t: ": [", c: "#E2E8F0" }, { t: '"TypeScript"', c: "#FCD34D" }, { t: ", ", c: "#E2E8F0" }, { t: '"Python"', c: "#FCD34D" }, { t: ", ", c: "#E2E8F0" }, { t: '"PostgreSQL"', c: "#FCD34D" }, { t: "],", c: "#E2E8F0" }] },
+  { tokens: [{ t: "  builds", c: "#34D399" }, { t: ": ", c: "#E2E8F0" }, { t: '"full-stack marketplaces"', c: "#FCD34D" }, { t: ",", c: "#E2E8F0" }] },
+  { tokens: [{ t: "  focus", c: "#34D399" }, { t: ": ", c: "#E2E8F0" }, { t: '"RAG + ML integration"', c: "#FCD34D" }, { t: ",", c: "#E2E8F0" }] },
   { tokens: [{ t: "  deploy", c: "#F87171" }, { t: ": async () => {", c: "#E2E8F0" }] },
   { tokens: [{ t: "    await ", c: "#7C3AED" }, { t: "ship(", c: "#60A5FA" }, { t: "production", c: "#FCD34D" }, { t: ");", c: "#E2E8F0" }] },
   { tokens: [{ t: "  }", c: "#E2E8F0" }] },
@@ -76,7 +76,7 @@ function CodeEditor() {
         <div className="w-3 h-3 rounded-full" style={{ background: "#FFBD2E" }} />
         <div className="w-3 h-3 rounded-full" style={{ background: "#28C840" }} />
         <span className="ml-3 text-xs" style={{ color: "#6B7280", letterSpacing: "0.05em" }}>
-          architect.ts
+          developer.ts
         </span>
         <div className="ml-auto flex items-center gap-1">
           <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#34D399" }} />
@@ -283,7 +283,7 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 // ─── Main Hero ────────────────────────────────────────────────────────────────
 export default function HeroSection(): JSX.Element {
   const typedRole = useTypingEffect(
-    ["Full-Stack Engineer", "Systems Architect", "Performance Obsessive", "Open Source Builder"],
+    ["Full-Stack Developer", "MERN / PERN Engineer", "AI & RAG Integrator", "NED SE Student"],
     65, 2000
   );
 
@@ -404,9 +404,10 @@ export default function HeroSection(): JSX.Element {
             className="mb-10 max-w-lg"
             style={{ color: "#64748B", lineHeight: 1.8, fontSize: "clamp(0.9rem, 2.5vw, 1.125rem)" }}
           >
-            I architect distributed systems that handle{" "}
-            <span style={{ color: "#94A3B8" }}>millions of requests</span>, obsess over
-            sub-millisecond latency, and ship clean code that future-me won't hate.
+            I build{" "}
+            <span style={{ color: "#94A3B8" }}>scalable full-stack web applications</span> and
+            ship AI-powered features , RAG chatbots, ML recommendations, real-time systems ,
+            with clean architecture and a strong focus on user-centric design.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -442,7 +443,7 @@ export default function HeroSection(): JSX.Element {
 
   {/* Download CV */}
   <motion.a
-    href="/resume/Zohaib_Ali_Full_Stack_Developer_Resume.pdf"
+    href="/resume/Zohaib_Full_Stack_Developer_Resume.pdf"
     download
     whileHover={{ scale: 1.02, y: -2 }}
     whileTap={{ scale: 0.98 }}
@@ -467,7 +468,7 @@ export default function HeroSection(): JSX.Element {
             transition={{ delay: 0.85 }}
             className="flex flex-wrap gap-2 justify-center lg:justify-start"
           >
-            {["ReactJS", "TypeScript", "ExpressJS", "NodeJS", "MongoDB"].map((tech, i) => (
+            {["React.js", "TypeScript", "Node.js", "Express.js", "FastAPI", "MongoDB"].map((tech, i) => (
               <motion.span
                 key={tech}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -498,9 +499,9 @@ export default function HeroSection(): JSX.Element {
           style={{ minHeight: "420px", overflow: "visible" }}
         >
           {/* Floating metric cards — repositioned to stay within visible bounds */}
-          <MetricCard label="Latency P99" value="4.2ms" sub="last 30d avg" color="#34D399" delay={1.2} x={5} y={15} />
-          <MetricCard label="Uptime" value="99.98%" sub="12 month avg" color="#60A5FA" delay={1.4} x={88} y={10} />
-          <MetricCard label="Throughput" value="2.4M" sub="req/day peak" color="#F59E0B" delay={1.6} x={88} y={82} />
+          <MetricCard label="Projects Shipped" value="6+" sub="full-stack builds" color="#34D399" delay={1.2} x={5} y={15} />
+          <MetricCard label="Internships" value="2+" sub="Full Stack + Frontend" color="#60A5FA" delay={1.4} x={88} y={10} />
+          <MetricCard label="Service Categories" value="9" sub="HelpGhar platform" color="#F59E0B" delay={1.6} x={88} y={82} />
 
           {/* Main code editor with 3D tilt */}
           <TiltCard>
@@ -534,7 +535,7 @@ export default function HeroSection(): JSX.Element {
               className="ml-auto"
               style={{ color: "#34D399", fontFamily: "monospace", fontSize: "13px" }}
             >
-              1,847
+              842
             </span>
           </motion.div>
 
