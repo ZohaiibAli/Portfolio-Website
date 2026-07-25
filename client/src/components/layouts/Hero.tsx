@@ -283,7 +283,7 @@ function TiltCard({ children }: { children: React.ReactNode }) {
 // ─── Main Hero ────────────────────────────────────────────────────────────────
 export default function HeroSection(): JSX.Element {
   const typedRole = useTypingEffect(
-    ["Full-Stack Developer", "MERN / PERN Engineer", "AI & RAG Integrator", "NED SE Student"],
+    ["Full-Stack Developer", "MERN / PERN Engineer", "AI & RAG Integrator", "Backend Engineer"],
     65, 2000
   );
 
