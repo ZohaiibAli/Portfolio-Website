@@ -222,7 +222,7 @@ export default function AboutMe(): JSX.Element {
                 >
                   <img
                     src="/images/Pic.png"
-                    alt="Alex Chen — Software Engineer"
+                    alt="Zohaib Ali — Full Stack Developer"
                     className="w-full h-full object-cover"
                     style={{ filter: "brightness(0.92) saturate(1.05)" }}
                   />
@@ -284,13 +284,13 @@ export default function AboutMe(): JSX.Element {
                       className="text-xs font-bold leading-none mb-0.5"
                       style={{ color: "#34D399", fontFamily: "'JetBrains Mono', monospace" }}
                     >
-                      1+ yrs
+                      NED University
                     </div>
                     <div
                       className="text-xs leading-none"
                       style={{ color: "#4B5563", fontFamily: "monospace" }}
                     >
-                      experience
+                      software engineering
                     </div>
                   </div>
                 </motion.div>
@@ -313,7 +313,7 @@ export default function AboutMe(): JSX.Element {
                       className="text-xs font-bold leading-none mb-0.5"
                       style={{ color: "#60A5FA", fontFamily: "'JetBrains Mono', monospace" }}
                     >
-                      10+ shipped
+                      6+ shipped
                     </div>
                     <div
                       className="text-xs leading-none"
@@ -375,10 +375,10 @@ export default function AboutMe(): JSX.Element {
               className="text-base sm:text-lg max-w-lg"
               style={{ color: "#64748B", lineHeight: 1.8 }}
             >
-              Software engineer focused on{" "}
-              <span style={{ color: "#94A3B8" }}>distributed systems</span> and{" "}
-              <span style={{ color: "#94A3B8" }}>clean architecture</span>. I turn
-              complex problems into simple, reliable solutions.
+              Full Stack Developer specializing in{" "}
+              <span style={{ color: "#94A3B8" }}>scalable web applications</span> and{" "}
+              <span style={{ color: "#94A3B8" }}>RAG/ML-powered features</span>. I turn
+              complex problems into simple, reliable, user-centric solutions.
             </motion.p>
 
             {/* Tech stack pills — same style as Hero */}
@@ -388,7 +388,7 @@ export default function AboutMe(): JSX.Element {
               transition={{ delay: 0.5 }}
               className="flex flex-wrap gap-2 justify-center lg:justify-start"
             >
-              {["ReactJS", "TypeScript", "ExpressJS", "NodeJS", "MongoDB"].map((tech, i) => (
+              {["React.js", "TypeScript", "Node.js", "Express.js", "FastAPI", "MongoDB"].map((tech, i) => (
                 <motion.span
                   key={tech}
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -417,9 +417,9 @@ export default function AboutMe(): JSX.Element {
               className="flex gap-10 justify-center lg:justify-start"
             >
               {[
-                { value: "1+", label: "Years Exp", color: "#60A5FA" },
-                { value: "10+", label: "Projects", color: "#34D399" },
-                { value: "6+", label: "Systems", color: "#A78BFA" },
+                { value: "2+", label: "Internships", color: "#60A5FA" },
+                { value: "6+", label: "Projects", color: "#34D399" },
+                { value: "3+", label: "Tech Stacks", color: "#A78BFA" },
               ].map((stat) => (
                 <div key={stat.label} className="flex flex-col items-center lg:items-start gap-0.5">
                   <span
