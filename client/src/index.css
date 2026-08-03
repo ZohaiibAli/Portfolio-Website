@@ -1,78 +1,117 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* ── Surfaces ─────────────────────────────────────────────── */
+    --bg: #060a12;
+    --bg-elevated: rgba(13, 17, 23, 0.85);
+    --hairline: rgba(255, 255, 255, 0.07);
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
- 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
- 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
- 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
- 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
- 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* ── Text ─────────────────────────────────────────────────── */
+    --text: #f1f5f9;
+    --text-dim: #94a3b8;
+    --text-muted: #64748b;
+    --text-faint: #334155;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
- 
-    --radius: 0.5rem;
+    /* ── Accents ──────────────────────────────────────────────── */
+    --blue: #60a5fa;
+    --blue-deep: #2563eb;
+    --cyan: #22d3ee;
+    --green: #34d399;
+    --violet: #7c3aed;
+    --amber: #f59e0b;
+
+    /* ── Type ─────────────────────────────────────────────────── */
+    --font-display: "Sora", system-ui, sans-serif;
+    --font-body: "DM Sans", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    color-scheme: dark;
   }
- 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
- 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
- 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
- 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
- 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
- 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
- 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
- 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+
+  * {
+    border-color: var(--hairline);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* The fixed navbar must not cover anchored sections. */
+    scroll-padding-top: 72px;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: rgba(37, 99, 235, 0.32);
+    color: #fff;
+  }
+
+  /* Slim, on-brand scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #05080e;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #1e3a5f, #2563eb55);
+    border-radius: 999px;
+    border: 2px solid #05080e;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #2563eb, #7c3aed);
   }
 }
- 
-@layer base {
-  * {
-    @apply border-border;
-    font-family: Arimo;
+
+@layer components {
+  /* Gradient text used across every section heading. */
+  .grad-text {
+    background: linear-gradient(120deg, #60a5fa 0%, #22d3ee 45%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
-  body {
-    @apply bg-background text-foreground;
-    @apply text-black;
+
+  /* Applied via className on every element that renders in JetBrains Mono. */
+  .mono {
+    font-family: var(--font-mono);
+  }
+}
+
+@layer utilities {
+  /* Force GPU compositing on elements we animate continuously. */
+  .gpu {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+  }
+}
+
+/*
+  Every continuous/decorative animation is opt-out. Framer Motion transforms are
+  neutralised by `useReducedMotion` in JS; this covers CSS-driven motion.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

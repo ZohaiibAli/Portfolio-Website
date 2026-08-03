@@ -1,5 +1,10 @@
 /// <reference types="vite/client" />
 
-declare const global: {
-    basename: string
+interface ImportMetaEnv {
+  /** Base URL of the contact API, e.g. https://api.example.com */
+  readonly VITE_API_BASE_URL: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
 }
