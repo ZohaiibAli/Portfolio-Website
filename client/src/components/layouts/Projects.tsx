@@ -21,6 +21,9 @@ interface Project {
   accent: string;
   tags: string[];
   icon: string;
+  /** Basename in `public/images/projects/` — a screenshot of the deployed
+      site. `null` falls back to the generated gradient artwork. */
+  preview: string | null;
   liveDemo: string | null;
   github: string | null;
 }
@@ -44,6 +47,7 @@ const PROJECTS: Project[] = [
     accent: "#4ADE80",
     tags: ["React.js", "TypeScript", "RAG Chatbot", "ML Recommendations"],
     icon: "⬟",
+    preview: "helpghar",
     liveDemo: "https://help-ghar-beta.vercel.app/",
     github: null,
   },
@@ -64,6 +68,8 @@ const PROJECTS: Project[] = [
     accent: "#F59E0B",
     tags: ["Streamlit", "Python", "Pandas", "Data Cleaning"],
     icon: "◆",
+    // Runs locally as a Streamlit app; nothing deployed to screenshot.
+    preview: null,
     liveDemo: null,
     github: null,
   },
@@ -91,6 +97,7 @@ const PROJECTS: Project[] = [
       "H3",
     ],
     icon: "⬡",
+    preview: "servicehub",
     liveDemo: "https://frontend-pro-battle26-stage3.vercel.app/login",
     github: null,
   },
@@ -99,24 +106,160 @@ const PROJECTS: Project[] = [
 /* ── Card artwork ─────────────────────────────────────────────────────────
    Shared between the grid card and the modal so `layoutId` can morph it.    */
 
-function Artwork({
-  project,
-  tall = false,
+/** Hostname only, for the fake address bar: `help-ghar-beta.vercel.app`. */
+function hostOf(url: string): string {
+  try {
+    return new URL(url).host;
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Browser window frame shared by every card.
+ *
+ * The metadata lives in the chrome bar rather than floating over the artwork.
+ * That was the first version, and it failed the moment the artwork became a
+ * real screenshot: HelpGhar's site is mostly white, so accent-coloured text
+ * sat on white and disappeared. A scrim would have to be heavy enough for the
+ * brightest screenshot any future project might have — which is to say heavy
+ * enough to hide the screenshot. The chrome bar is a surface this component
+ * controls, so contrast is fixed no matter what is behind it.
+ */
+function BrowserFrame({
+  label,
+  year,
+  accent,
+  height,
+  children,
 }: {
-  project: Project;
-  tall?: boolean;
+  label: string;
+  /** Omitted in the expanded view, where the close button occupies that
+      corner and the subtitle already carries the year. */
+  year?: string;
+  accent: string;
+  height: number;
+  children: React.ReactNode;
 }) {
-  const reduced = useReducedMotion();
+  const CHROME = 26;
 
   return (
     <div
       className="relative w-full overflow-hidden"
-      style={{
-        height: tall ? 200 : 158,
-        background: project.gradient,
-        flexShrink: 0,
-      }}
+      style={{ height, background: "#0B0F16", flexShrink: 0 }}
     >
+      {/* Traffic lights + address bar — the same language as the hero's code
+          editor, so the two read as one system. */}
+      <div
+        className="flex items-center gap-1.5 px-3"
+        style={{ height: CHROME, background: "#151A22", borderBottom: "1px solid #1E242E" }}
+      >
+        {["#FF5F57", "#FFBD2E", "#28C840"].map((c) => (
+          <span
+            key={c}
+            style={{ width: 6, height: 6, borderRadius: 999, background: c, flexShrink: 0 }}
+          />
+        ))}
+        <span
+          className="mono ml-2 truncate rounded"
+          style={{
+            padding: "1px 8px",
+            fontSize: 8.5,
+            color: "#5B6B80",
+            background: "rgba(255,255,255,0.04)",
+            letterSpacing: "0.02em",
+            minWidth: 0,
+          }}
+        >
+          {label}
+        </span>
+        {year && (
+          <span
+            className="mono ml-auto pl-2"
+            style={{ fontSize: 9, color: alpha(accent, 0.8), letterSpacing: "0.1em", flexShrink: 0 }}
+          >
+            {year}
+          </span>
+        )}
+      </div>
+
+      <div className="relative overflow-hidden" style={{ height: height - CHROME }}>
+        {children}
+        {/* Fades the artwork into the card body below it. Cosmetic only now —
+            nothing depends on it for legibility. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0"
+          style={{
+            height: 40,
+            background: "linear-gradient(to top, rgba(6,10,18,0.85), transparent)",
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The card's visual: a screenshot of the deployed site where one exists.
+ *
+ * The generated gradient-and-glyph artwork was a reasonable placeholder, but it
+ * told a visitor nothing — every card looked like every other card and none of
+ * them looked like software. A screenshot of the actual running thing is the
+ * most persuasive image a project card can carry, so it wins wherever there is
+ * something deployed to point a browser at.
+ *
+ * On hover the screenshot pans down to reveal more of the page. That is a plain
+ * `translateY`, so a grid of them animates on the compositor for free.
+ */
+function Artwork({
+  project,
+  tall = false,
+  hovered = false,
+}: {
+  project: Project;
+  tall?: boolean;
+  hovered?: boolean;
+}) {
+  const reduced = useReducedMotion();
+  const height = tall ? 200 : 158;
+
+  if (project.preview) {
+    return (
+      <BrowserFrame
+        label={project.liveDemo ? hostOf(project.liveDemo) : project.name.toLowerCase()}
+        year={tall ? undefined : project.year}
+        accent={project.accent}
+        height={height}
+      >
+        {/* Deliberately wider than its frame is tall, so there is page left to
+            pan to; `top` keeps the site's own header in shot at rest. */}
+        <motion.img
+          src={`/images/projects/${project.preview}.webp`}
+          alt={`${project.name} — screenshot of the live site`}
+          loading="lazy"
+          decoding="async"
+          width={1200}
+          height={750}
+          className="absolute inset-x-0 top-0 w-full"
+          style={{ display: "block" }}
+          animate={{ y: hovered && !reduced ? -(height * 0.3) : 0 }}
+          transition={{ duration: 0.85, ease: EASE_OUT }}
+        />
+      </BrowserFrame>
+    );
+  }
+
+  // Nothing deployed — keep the generated artwork, but inside the same frame so
+  // the row doesn't read as two finished cards and one unfinished one.
+  return (
+    <BrowserFrame
+      label="runs locally"
+      year={tall ? undefined : project.year}
+      accent={project.accent}
+      height={height}
+    >
+      <div className="absolute inset-0" style={{ background: project.gradient }} />
       <div
         className="absolute inset-0"
         style={{
@@ -137,47 +280,18 @@ function Artwork({
         style={{
           translateX: "-50%",
           translateY: "-50%",
-          fontSize: tall ? 76 : 54,
+          fontSize: tall ? 68 : 50,
           fontFamily: "var(--font-mono)",
           color: project.accent,
-          opacity: 0.2,
+          opacity: 0.22,
           filter: `drop-shadow(0 0 22px ${project.accent})`,
         }}
-        animate={
-          reduced ? undefined : { rotate: [0, 8, -8, 0], scale: [1, 1.06, 1] }
-        }
+        animate={reduced ? undefined : { rotate: [0, 8, -8, 0], scale: [1, 1.06, 1] }}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       >
         {project.icon}
       </motion.span>
-
-      <span
-        className="mono absolute bottom-3 left-3.5 rounded-md"
-        style={{
-          padding: "3px 9px",
-          fontSize: 9.5,
-          color: project.accent,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          background: alpha(project.accent, 0.14),
-          border: `1px solid ${alpha(project.accent, 0.28)}`,
-          backdropFilter: "blur(8px)",
-        }}
-      >
-        {project.tags[0]}
-      </span>
-
-      <span
-        className="mono absolute bottom-3 right-3.5"
-        style={{
-          fontSize: 10,
-          color: alpha(project.accent, 0.65),
-          letterSpacing: "0.1em",
-        }}
-      >
-        {project.year}
-      </span>
-    </div>
+    </BrowserFrame>
   );
 }
 
@@ -230,7 +344,7 @@ function ProjectCard({
         aria-label={`Open details for ${project.name}`}
       >
         <motion.div layoutId={`project-art-${project.id}`}>
-          <Artwork project={project} />
+          <Artwork project={project} hovered={hovered} />
         </motion.div>
 
         <div className="flex flex-1 flex-col p-5">
