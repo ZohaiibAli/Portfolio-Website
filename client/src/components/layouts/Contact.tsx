@@ -6,6 +6,7 @@ import Reveal from "@/components/fx/Reveal";
 import SpotlightCard from "@/components/fx/SpotlightCard";
 import GlowButton from "@/components/ui/GlowButton";
 import Tag from "@/components/ui/Tag";
+import { useHasFinePointer } from "@/lib/usePointer";
 import { EASE_BACK, EASE_OUT, VIEWPORT, alpha } from "@/lib/motion";
 
 const LINKS = [
@@ -21,6 +22,8 @@ const ROLES = ["Full Stack Developer", "Frontend Developer", "Backend Developer"
 function ContactLink({ item, index }: { item: (typeof LINKS)[number]; index: number }) {
   const [hovered, setHovered] = useState(false);
   const reduced = useReducedMotion();
+  // Touch fires `pointerenter` as well — see the note in `SpotlightCard`.
+  const hoverable = useHasFinePointer() && !reduced;
 
   return (
     <motion.a
@@ -33,8 +36,8 @@ function ContactLink({ item, index }: { item: (typeof LINKS)[number]; index: num
       viewport={VIEWPORT}
       transition={{ duration: 0.55, delay: index * 0.08, ease: EASE_OUT }}
       whileHover={reduced ? undefined : { x: 6 }}
-      onPointerEnter={() => setHovered(true)}
-      onPointerLeave={() => setHovered(false)}
+      onPointerEnter={hoverable ? () => setHovered(true) : undefined}
+      onPointerLeave={hoverable ? () => setHovered(false) : undefined}
       style={{
         padding: "14px 18px",
         textDecoration: "none",

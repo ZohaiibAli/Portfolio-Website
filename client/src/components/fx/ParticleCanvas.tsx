@@ -58,8 +58,14 @@ function densityFor(w: number, h: number, high: boolean): number {
  *    more than the geometry itself. The per-link alpha fade is quantised, and
  *    at a peak opacity of 0.08 that is not a visible difference.
  *
- * On the low tier the mesh is dropped entirely and the field is thinned; the
- * drifting starfield reads the same and the frame cost is a fraction.
+ * On the low tier the field is thinned, the mesh is dropped, and — the part
+ * that matters most — the loop is dropped with it. Thinning the field still
+ * left a full-viewport canvas being cleared and re-uploaded to the GPU sixty
+ * times a second for the entire session, behind every other layer on the page,
+ * whether or not anything on screen was moving. Drawing the field once and
+ * leaving it there costs one upload at mount. A starfield that does not drift
+ * is indistinguishable from one that drifts at 0.16px per frame unless you stop
+ * and stare at it, which is not a trade worth making on a phone.
  */
 export default function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -74,6 +80,8 @@ export default function ParticleCanvas() {
 
     const high = tier === "high";
     const linksEnabled = high && !reduced;
+    /** Low tier and reduced-motion both get a single static frame. */
+    const animated = high && !reduced;
 
     let width = 0;
     let height = 0;
@@ -134,16 +142,15 @@ export default function ParticleCanvas() {
        pause mid-scroll. */
     const segments: number[][] = BANDS.map(() => []);
 
+    /** Renders exactly one frame. Scheduling is `loop`'s job, not this one's. */
     const draw = () => {
-      raf = requestAnimationFrame(draw);
-
       ctx.clearRect(0, 0, width, height);
       t += 0.01;
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
-        if (!reduced) {
+        if (animated) {
           p.x += p.vx;
           p.y += p.vy;
 
@@ -169,7 +176,11 @@ export default function ParticleCanvas() {
         }
 
         const [r, g, b] = PALETTE[p.hue];
-        const pulse = reduced ? 0.34 : 0.24 + Math.sin(t * 1.6 + p.twinkle) * 0.16;
+        // A still field gets a fixed brightness per star rather than the shared
+        // mid-point, so the frozen frame still has some sparkle to it.
+        const pulse = animated
+          ? 0.24 + Math.sin(t * 1.6 + p.twinkle) * 0.16
+          : 0.24 + Math.sin(p.twinkle) * 0.16;
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
@@ -230,6 +241,11 @@ export default function ParticleCanvas() {
       }
     };
 
+    const loop = () => {
+      raf = requestAnimationFrame(loop);
+      draw();
+    };
+
     /* ── Resize ─────────────────────────────────────────────────────────
        Mobile browsers fire `resize` every time the URL bar slides away, so a
        naive handler reallocates the canvas and reseeds the entire field
@@ -245,6 +261,9 @@ export default function ParticleCanvas() {
       height = h;
       applySize();
       if (isNewLayout || particles.length === 0) seed();
+      // Resizing the backing store clears it, and with no loop running nothing
+      // would ever put the field back.
+      if (!animated) draw();
     };
 
     const onResize = () => {
@@ -263,17 +282,22 @@ export default function ParticleCanvas() {
     // A hidden tab still runs RAF in some browsers; stop burning cycles.
     const onVisibility = () => {
       cancelAnimationFrame(raf);
-      if (!document.hidden) raf = requestAnimationFrame(draw);
+      if (!document.hidden) raf = requestAnimationFrame(loop);
     };
 
     measure();
-    raf = requestAnimationFrame(draw);
     window.addEventListener("resize", onResize);
+
+    // Static tiers are already painted — `measure` drew the one frame they get.
+    if (animated) {
+      raf = requestAnimationFrame(loop);
+      document.addEventListener("visibilitychange", onVisibility);
+    }
+
     if (repel) {
       window.addEventListener("pointermove", onPointer, { passive: true });
       window.addEventListener("pointerleave", onLeave);
     }
-    document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
       cancelAnimationFrame(raf);

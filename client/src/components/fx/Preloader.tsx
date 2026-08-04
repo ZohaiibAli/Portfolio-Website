@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { EASE_OUT, EASE_SOFT } from "@/lib/motion";
 
@@ -16,39 +16,92 @@ interface Props {
  *
  * Skipped entirely under `prefers-reduced-motion` — the page just appears.
  */
-export default function Preloader({ onDone }: Props) {
-  const reduced = useReducedMotion();
+/**
+ * The counter, and everything whose appearance depends on it.
+ *
+ * Deliberately its own component. The count changes on every frame for 1.75
+ * seconds, and while it lived on the parent every one of those frames
+ * re-rendered the entire curtain — six panels, ten letter elements, the
+ * hairline, every Framer component in the subtree — to move one number and one
+ * width. React reconciles all of it and Framer re-reads its props each time.
+ *
+ * That work landed on the worst 1.75 seconds of the session: the browser is
+ * still parsing, decoding fonts and mounting the whole page underneath, and on
+ * a phone the entrance stuttered before the site had shown anything at all.
+ * Owning the state here confines each frame to the two nodes that changed.
+ */
+function ProgressReadout({ onDone }: { onDone: () => void }) {
   const [count, setCount] = useState(0);
-  const [exiting, setExiting] = useState(false);
 
   // Ease the counter so it decelerates into 100 instead of ticking linearly.
   useEffect(() => {
-    if (reduced) {
-      onDone();
-      setExiting(true);
-      return;
-    }
-
     let raf = 0;
     const start = performance.now();
     const DURATION = 1750;
+    let last = -1;
 
     const tick = (now: number) => {
       const t = Math.min((now - start) / DURATION, 1);
       const eased = 1 - Math.pow(1 - t, 3);
-      setCount(Math.round(eased * 100));
+      // The readout is a whole number, so most frames have nothing to say.
+      const next = Math.round(eased * 100);
+      if (next !== last) {
+        last = next;
+        setCount(next);
+      }
       if (t < 1) {
         raf = requestAnimationFrame(tick);
       } else {
-        // Let the hero mount and start its own entrance under the curtain.
         onDone();
-        setTimeout(() => setExiting(true), 260);
       }
     };
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
+  }, [onDone]);
+
+  return (
+    <>
+      {/* Loading rail */}
+      <div className="relative" style={{ width: "min(58vw, 300px)", height: 1, background: "rgba(255,255,255,0.09)" }}>
+        <div
+          className="absolute inset-y-0 left-0"
+          style={{
+            background: "linear-gradient(90deg, #2563EB, #22D3EE, #A78BFA)",
+            boxShadow: "0 0 14px rgba(37,99,235,0.8)",
+            width: `${count}%`,
+          }}
+        />
+      </div>
+
+      <div
+        className="mono flex w-full items-center justify-between"
+        style={{ width: "min(58vw, 300px)", fontSize: 11, letterSpacing: "0.18em", color: "#334155" }}
+      >
+        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
+          BUILDING INTERFACE
+        </motion.span>
+        <span style={{ color: "#60A5FA" }}>{String(count).padStart(3, "0")}</span>
+      </div>
+    </>
+  );
+}
+
+export default function Preloader({ onDone }: Props) {
+  const reduced = useReducedMotion();
+  const [exiting, setExiting] = useState(false);
+
+  useEffect(() => {
+    if (!reduced) return;
+    onDone();
+    setExiting(true);
   }, [reduced, onDone]);
+
+  const onCounterDone = useCallback(() => {
+    // Let the hero mount and start its own entrance under the curtain.
+    onDone();
+    setTimeout(() => setExiting(true), 260);
+  }, [onDone]);
 
   useEffect(() => {
     document.body.style.overflow = exiting ? "" : "hidden";
@@ -115,31 +168,7 @@ export default function Preloader({ onDone }: Props) {
               ))}
             </div>
 
-            {/* Loading rail */}
-            <div className="relative" style={{ width: "min(58vw, 300px)", height: 1, background: "rgba(255,255,255,0.09)" }}>
-              <motion.div
-                className="absolute inset-y-0 left-0"
-                style={{
-                  background: "linear-gradient(90deg, #2563EB, #22D3EE, #A78BFA)",
-                  boxShadow: "0 0 14px rgba(37,99,235,0.8)",
-                  width: `${count}%`,
-                }}
-              />
-            </div>
-
-            <div
-              className="mono flex w-full items-center justify-between"
-              style={{ width: "min(58vw, 300px)", fontSize: 11, letterSpacing: "0.18em", color: "#334155" }}
-            >
-              <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                BUILDING INTERFACE
-              </motion.span>
-              <span style={{ color: "#60A5FA" }}>{String(count).padStart(3, "0")}</span>
-            </div>
+            <ProgressReadout onDone={onCounterDone} />
           </motion.div>
 
           {/* Hairline that snaps shut as the curtain lifts. */}

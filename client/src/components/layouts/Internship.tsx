@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { AnimatePresence, motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useReducedMotion } from "framer-motion";
 import Section from "@/components/fx/Section";
 import SectionHeading, { LiveDot } from "@/components/fx/SectionHeading";
 import SpotlightCard from "@/components/fx/SpotlightCard";
@@ -7,6 +7,7 @@ import TiltCard from "@/components/fx/TiltCard";
 import Reveal from "@/components/fx/Reveal";
 import CountUp from "@/components/fx/CountUp";
 import Tag from "@/components/ui/Tag";
+import { useAmbient, useScrollFx } from "@/lib/useAmbient";
 import { EASE_OUT, VIEWPORT, alpha } from "@/lib/motion";
 import { INTERNSHIPS_COMPLETED, PROJECTS_SHIPPED } from "@/lib/profile";
 
@@ -85,7 +86,7 @@ const PROFICIENCY = [
 
 function TimelineItem({ item, index, isLast }: { item: Entry; index: number; isLast: boolean }) {
   const [expanded, setExpanded] = useState(false);
-  const reduced = useReducedMotion();
+  const ambient = useAmbient();
   const visible = expanded ? item.highlights : item.highlights.slice(0, 1);
 
   return (
@@ -108,16 +109,21 @@ function TimelineItem({ item, index, isLast }: { item: Entry; index: number; isL
             background: item.color,
             border: `2px solid ${alpha(item.color, 0.4)}`,
           }}
+          /* `box-shadow` is a paint property: unlike transform or opacity it
+             cannot be handed to the compositor, so every frame of this loop is
+             a main-thread repaint of the dot and its 18px halo — and there is
+             one per timeline entry, running forever, in a section the user
+             spends most of the session scrolled past. High tier only. */
           animate={
-            reduced
-              ? undefined
-              : {
+            ambient
+              ? {
                   boxShadow: [
                     `0 0 0 ${alpha(item.color, 0)}`,
                     `0 0 18px ${alpha(item.color, 0.65)}`,
                     `0 0 0 ${alpha(item.color, 0)}`,
                   ],
                 }
+              : undefined
           }
           transition={{ duration: 2.6, repeat: Infinity, delay: index * 0.4 }}
         />
@@ -278,13 +284,14 @@ const CARD_LINES: { label: string; value?: string; color: string; size: number; 
 ];
 
 function ProfileCard() {
+  const ambient = useAmbient();
   const reduced = useReducedMotion();
 
   return (
     <Reveal from="right" distance={48} duration={0.95}>
       <TiltCard max={6} lift={18} style={{ borderRadius: 22 }}>
         <motion.div
-          animate={reduced ? undefined : { y: [0, -9, 0] }}
+          animate={ambient ? { y: [0, -9, 0] } : undefined}
           transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
           className="overflow-hidden"
           style={{
@@ -421,12 +428,23 @@ export default function Internship() {
   const timelineRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
-  // Rail that fills as the timeline scrolls past.
-  const { scrollYProgress } = useScroll({
-    target: timelineRef,
-    offset: ["start 80%", "end 40%"],
+  /* Rail that fills as the timeline scrolls past — the same effect as
+     `HackExp`'s, and it needs the same treatment, which it was missing.
+
+     Targeting an element means measuring its offset chain on every scroll
+     event, and the spring on top keeps running for a beat after the finger
+     lifts: precisely into the momentum scroll it is competing with. Below the
+     high tier the rail is simply drawn full. */
+  const fillOn = useScrollFx();
+  const still = useMotionValue(0);
+  const { scrollYProgress } = useScroll(
+    fillOn ? { target: timelineRef, offset: ["start 80%", "end 40%"] } : {}
+  );
+  const fill = useSpring(fillOn ? scrollYProgress : still, {
+    stiffness: 70,
+    damping: 22,
+    restDelta: 0.001,
   });
-  const fill = useSpring(scrollYProgress, { stiffness: 70, damping: 22, restDelta: 0.001 });
 
   return (
     <Section id="internship" label="Internship Experience">
@@ -491,7 +509,7 @@ export default function Internship() {
                   top: 0,
                   bottom: 0,
                   width: 2,
-                  scaleY: fill,
+                  scaleY: fillOn ? fill : 1,
                   transformOrigin: "top",
                   borderRadius: 999,
                   background: "linear-gradient(to bottom, #2563EB, #22D3EE, #7C3AED)",

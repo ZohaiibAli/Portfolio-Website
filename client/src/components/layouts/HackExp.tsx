@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
-import { AnimatePresence, motion, useScroll, useSpring, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useReducedMotion } from "framer-motion";
 import Section from "@/components/fx/Section";
 import SectionHeading from "@/components/fx/SectionHeading";
 import SpotlightCard from "@/components/fx/SpotlightCard";
 import Reveal from "@/components/fx/Reveal";
 import CountUp from "@/components/fx/CountUp";
 import Tag from "@/components/ui/Tag";
+import { useAmbient, useMediaQuery, useScrollFx } from "@/lib/useAmbient";
 import { EASE_OUT, VIEWPORT, alpha } from "@/lib/motion";
 
 interface Hackathon {
@@ -244,10 +245,31 @@ function YearPlate({ item, side }: { item: Hackathon; side: "left" | "right" }) 
 
 export default function HackExp() {
   const railRef = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const ambient = useAmbient();
+  const fillOn = useScrollFx();
 
-  const { scrollYProgress } = useScroll({ target: railRef, offset: ["start 82%", "end 30%"] });
-  const fill = useSpring(scrollYProgress, { stiffness: 65, damping: 22, restDelta: 0.001 });
+  /* The section ships two full layouts — an alternating centre rail and a
+     left-aligned stack — and `hidden lg:block` only stopped one of them being
+     *painted*. Both were mounted on every device, so a phone built every
+     hackathon card twice, ran a scroll spring for a rail it would never show,
+     and kept a `box-shadow` loop alive on each of the hidden rail's nodes.
+     Choosing in JS means only the layout in use exists. */
+  const wide = useMediaQuery("(min-width: 1024px)");
+
+  /* Element-targeted tracking measures the rail's offset chain on every scroll
+     event, and the spring on top of it integrates on every frame the value
+     moves — both of them, on the tier without a rail to fill, producing a
+     number nothing reads. Untargeting the one and parking the other on a
+     motionless source is what actually stops the work. See `Section`. */
+  const still = useMotionValue(0);
+  const { scrollYProgress } = useScroll(
+    fillOn ? { target: railRef, offset: ["start 82%", "end 30%"] } : {}
+  );
+  const fill = useSpring(fillOn ? scrollYProgress : still, {
+    stiffness: 65,
+    damping: 22,
+    restDelta: 0.001,
+  });
 
   return (
     <Section id="hackathons" label="Hackathon Experience">
@@ -257,7 +279,8 @@ export default function HackExp() {
       </SectionHeading>
 
       {/* ── Desktop: alternating centre rail ── */}
-      <div ref={railRef} className="relative hidden lg:block">
+      {wide && (
+      <div ref={railRef} className="relative">
         {/* Ghost rail */}
         <div
           aria-hidden="true"
@@ -271,7 +294,7 @@ export default function HackExp() {
           style={{
             width: 2,
             translate: "-50%",
-            scaleY: reduced ? 1 : fill,
+            scaleY: fillOn ? fill : 1,
             transformOrigin: "top",
             borderRadius: 999,
             background: "linear-gradient(to bottom, #2563EB, #22D3EE, #7C3AED)",
@@ -318,16 +341,18 @@ export default function HackExp() {
                   <motion.span
                     className="block rounded-full"
                     style={{ width: 15, height: 15, background: item.color, border: "3px solid #060A12" }}
+                    /* Paint property, infinite loop — see the matching note in
+                       `Internship`. High tier only. */
                     animate={
-                      reduced
-                        ? undefined
-                        : {
+                      ambient
+                        ? {
                             boxShadow: [
                               `0 0 0 ${alpha(item.color, 0)}`,
                               `0 0 20px ${alpha(item.color, 0.7)}`,
                               `0 0 0 ${alpha(item.color, 0)}`,
                             ],
                           }
+                        : undefined
                     }
                     transition={{ duration: 2.6, repeat: Infinity, delay: i * 0.35 }}
                   />
@@ -342,9 +367,11 @@ export default function HackExp() {
           })}
         </div>
       </div>
+      )}
 
       {/* ── Mobile: left-aligned rail ── */}
-      <div className="relative lg:hidden">
+      {!wide && (
+      <div className="relative">
         <div
           aria-hidden="true"
           className="absolute inset-y-0"
@@ -391,6 +418,7 @@ export default function HackExp() {
           ))}
         </div>
       </div>
+      )}
 
       {/* ── Stats ── */}
       <div

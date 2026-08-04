@@ -6,6 +6,8 @@ import SectionHeading from "@/components/fx/SectionHeading";
 import Reveal from "@/components/fx/Reveal";
 import GlowButton from "@/components/ui/GlowButton";
 import Tag from "@/components/ui/Tag";
+import { useAmbient } from "@/lib/useAmbient";
+import { useHasFinePointer } from "@/lib/usePointer";
 import { EASE_OUT, SPRING_SOFT, VIEWPORT, alpha } from "@/lib/motion";
 import { PROJECTS_SHIPPED } from "@/lib/profile";
 
@@ -222,6 +224,7 @@ function Artwork({
   hovered?: boolean;
 }) {
   const reduced = useReducedMotion();
+  const ambient = useAmbient();
   const height = tall ? 200 : 158;
 
   if (project.preview) {
@@ -274,7 +277,13 @@ function Artwork({
         }}
       />
 
-      {/* Slow orbit of the glyph, so the artwork never sits perfectly still. */}
+      {/* Slow orbit of the glyph, so the artwork never sits perfectly still.
+
+          The glyph carries a 22px `drop-shadow`, and a filtered element cannot
+          be transformed on the compositor: rotating and scaling it means the
+          browser re-runs the shadow every frame for as long as the card is
+          mounted. Off below the high tier — the glyph keeps its glow, it just
+          stops moving. */}
       <motion.span
         className="absolute left-1/2 top-1/2 select-none"
         style={{
@@ -286,7 +295,7 @@ function Artwork({
           opacity: 0.22,
           filter: `drop-shadow(0 0 22px ${project.accent})`,
         }}
-        animate={reduced ? undefined : { rotate: [0, 8, -8, 0], scale: [1, 1.06, 1] }}
+        animate={ambient ? { rotate: [0, 8, -8, 0], scale: [1, 1.06, 1] } : undefined}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       >
         {project.icon}
@@ -308,6 +317,10 @@ function ProjectCard({
 }) {
   const [hovered, setHovered] = useState(false);
   const reduced = useReducedMotion();
+  /* `pointerenter` fires on touch too — see the note in `SpotlightCard`. Here
+     it also kicks off the artwork's pan, so a thumb dragging past a card
+     started a 0.85s image animation nobody asked for, mid-scroll. */
+  const hoverable = useHasFinePointer() && !reduced;
 
   return (
     <motion.div
@@ -325,8 +338,8 @@ function ProjectCard({
       <motion.button
         layoutId={`project-${project.id}`}
         onClick={onOpen}
-        onPointerEnter={() => setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
+        onPointerEnter={hoverable ? () => setHovered(true) : undefined}
+        onPointerLeave={hoverable ? () => setHovered(false) : undefined}
         transition={SPRING_SOFT}
         whileHover={reduced ? undefined : { y: -8 }}
         className="flex h-full w-full flex-col overflow-hidden text-left"

@@ -1,5 +1,6 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useAmbient, useScrollFx } from "@/lib/useAmbient";
 import Section from "@/components/fx/Section";
 import Reveal from "@/components/fx/Reveal";
 import SplitText from "@/components/fx/SplitText";
@@ -34,7 +35,7 @@ function FloatingChip({
   position: React.CSSProperties;
   delay: number;
 }) {
-  const reduced = useReducedMotion();
+  const ambient = useAmbient();
 
   return (
     <motion.div
@@ -53,7 +54,7 @@ function FloatingChip({
       transition={{ delay, duration: 0.6, ease: EASE_OUT }}
     >
       <motion.span
-        animate={reduced ? undefined : { y: [0, -5, 0], rotate: [0, 4, 0] }}
+        animate={ambient ? { y: [0, -5, 0], rotate: [0, 4, 0] } : undefined}
         transition={{ duration: 5 + delay, repeat: Infinity, ease: EASE_INOUT }}
         style={{ fontSize: 17 }}
       >
@@ -76,13 +77,23 @@ function FloatingChip({
 
 export default function AboutMe() {
   const portraitRef = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
+  const ambient = useAmbient();
+  const parallax = useScrollFx();
 
-  // The portrait drifts against the copy as the section passes through.
-  const { scrollYProgress } = useScroll({
-    target: portraitRef,
-    offset: ["start end", "end start"],
-  });
+  /* The portrait drifts against the copy as the section passes through.
+
+     `imageScale` is the expensive half. The portrait carries a static
+     `filter: brightness/saturate/contrast`, and a filtered element cannot be
+     scaled on the compositor — the browser re-runs the filter over the full
+     image on every frame of the scroll. One image, but a large one, on the
+     first section a phone reaches after the hero.
+
+     Targeting an element also means measuring it every scroll frame — see the
+     note in `Section`. Nothing reads these values when the parallax is off, so
+     the tracking drops back to the viewport and off the main thread. */
+  const { scrollYProgress } = useScroll(
+    parallax ? { target: portraitRef, offset: ["start end", "end start"] } : {}
+  );
   const portraitY = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
   const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.14, 1.02, 1.14]);
 
@@ -97,14 +108,14 @@ export default function AboutMe() {
         <motion.div
           ref={portraitRef}
           className="flex flex-1 justify-center lg:justify-start"
-          style={{ y: reduced ? 0 : portraitY }}
+          style={{ y: parallax ? portraitY : 0 }}
         >
           <Reveal from="left" distance={48} scale duration={1}>
             <TiltCard max={11} lift={26} glare={false} style={{ borderRadius: 22 }}>
               <motion.div
                 className="relative"
                 style={{ width: "min(78vw, 340px)" }}
-                animate={reduced ? undefined : { y: [0, -10, 0] }}
+                animate={ambient ? { y: [0, -10, 0] } : undefined}
                 transition={{ duration: 7, repeat: Infinity, ease: EASE_INOUT }}
               >
                 {/* Aura — softness comes from the gradient falloff, not from a
@@ -121,8 +132,13 @@ export default function AboutMe() {
                   }}
                 />
 
-                {/* Rotating conic ring — a slow halo around the frame. */}
-                {!reduced && (
+                {/* Rotating conic ring — a slow halo around the frame.
+
+                    A conic gradient behind a two-layer `mask-composite` cutout
+                    is one of the costlier things a browser can be asked to
+                    draw, and rotating it means redrawing it every frame,
+                    forever. High tier only. */}
+                {ambient && (
                   <motion.div
                     aria-hidden="true"
                     className="absolute rounded-[26px]"
@@ -155,13 +171,13 @@ export default function AboutMe() {
                     loading="lazy"
                     className="h-full w-full object-cover"
                     style={{
-                      scale: reduced ? 1 : imageScale,
+                      scale: parallax ? imageScale : 1,
                       filter: "brightness(0.94) saturate(1.06) contrast(1.04)",
                     }}
                   />
 
                   {/* Scanline sweep */}
-                  {!reduced && (
+                  {ambient && (
                     <motion.div
                       aria-hidden="true"
                       className="pointer-events-none absolute inset-x-0"

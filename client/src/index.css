@@ -89,6 +89,60 @@
   .mono {
     font-family: var(--font-mono);
   }
+
+  /*
+    Terminal caret — the hero's typed role and the code editor both use it.
+
+    Deliberately CSS rather than a Framer loop. `repeat: Infinity` animations
+    are driven from JS on the main thread, so each one holds a slot on the frame
+    loop for the entire session; a CSS animation on `opacity` is handed to the
+    compositor and costs the page nothing once started. For something that
+    blinks forever and is two pixels wide, that difference is the whole story.
+  */
+  .caret {
+    width: 2px;
+    height: 1.05em;
+    background: #60a5fa;
+    animation: caret-blink 1.05s steps(1, end) infinite;
+  }
+
+  /* The travelling light in the hero's scroll cue — same reasoning. */
+  .scroll-cue {
+    animation: scroll-cue 1.9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes scroll-cue {
+  from {
+    transform: translateY(-14px);
+  }
+  to {
+    transform: translateY(40px);
+  }
+}
+
+/* The ticker's cruise, for tiers that don't get the scroll-velocity version.
+   The track holds two copies of its items, so -50% is one full copy: the frame
+   at 100% is pixel-identical to the frame at 0% and the loop has no seam.
+   `Marquee` supplies the duration once it has measured the track. */
+@keyframes marquee-cruise {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @layer utilities {
@@ -128,10 +182,13 @@
 }
 
 /* Compositing layers are cheap on a desktop GPU and scarce on a phone. Drop
-   the opacity half of the promise where memory is tight — these elements only
-   ever move. */
+   the promise entirely where memory is tight: on the low tier the elements
+   carrying `.gpu` are the ones whose continuous animation has already been
+   switched off in JS, so they no longer move at all — and a `will-change` on a
+   static element is pure cost, a permanent layer held for a change that is
+   never coming. */
 [data-quality="low"] .gpu {
-  will-change: transform;
+  will-change: auto;
 }
 
 /*

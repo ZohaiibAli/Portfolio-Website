@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useReducedMotion } from "framer-motion";
 import Magnetic from "@/components/fx/Magnetic";
 import { EASE_OUT, SPRING_SNAP } from "@/lib/motion";
@@ -246,12 +246,32 @@ export default function Navbar() {
   const { scrollY } = useScroll();
   const reduced = useReducedMotion();
 
-  // Condense on scroll, and hide entirely while scrolling down past the fold
-  // so long sections get the full viewport back.
+  /* Condense on scroll, and hide entirely while scrolling down past the fold
+     so long sections get the full viewport back.
+
+     Both of these are booleans that flip a handful of times in a session, and
+     they were being handed to `setState` on every scroll frame. React bails out
+     of the re-render when the value is unchanged, but it does that *after*
+     entering the dispatch path — twice per frame, on the fixed element sitting
+     above everything else on the page. Latching the current value in a ref
+     means the common case is two comparisons and nothing else. */
+  const scrolledRef = useRef(false);
+  const hiddenRef = useRef(false);
+
   useMotionValueEvent(scrollY, "change", (y) => {
     const prev = scrollY.getPrevious() ?? 0;
-    setScrolled(y > 24);
-    setHidden(!open && y > 320 && y > prev);
+
+    const nextScrolled = y > 24;
+    if (nextScrolled !== scrolledRef.current) {
+      scrolledRef.current = nextScrolled;
+      setScrolled(nextScrolled);
+    }
+
+    const nextHidden = !open && y > 320 && y > prev;
+    if (nextHidden !== hiddenRef.current) {
+      hiddenRef.current = nextHidden;
+      setHidden(nextHidden);
+    }
   });
 
   useEffect(() => {
@@ -402,10 +422,17 @@ export default function Navbar() {
           <motion.div
             className="fixed inset-0 lg:hidden"
             style={{ zIndex: 9997, background: "rgba(4,7,14,0.97)", backdropFilter: "blur(28px)" }}
-            initial={{ opacity: 0, clipPath: "circle(0% at 92% 5%)" }}
-            animate={{ opacity: 1, clipPath: "circle(150% at 92% 5%)" }}
-            exit={{ opacity: 0, clipPath: "circle(0% at 92% 5%)" }}
-            transition={{ duration: 0.6, ease: EASE_OUT }}
+            /* This overlay is, by definition, only ever seen on a phone — so
+               the expanding `clip-path` circle is the one place on the site
+               where an effect the low tier cannot afford is also the only
+               effect the low tier will ever see. An animated clip-path forces
+               a full-viewport re-clip every frame, and it fires on tap, so it
+               is the first thing the menu does. A fade is instant and reads as
+               deliberate rather than degraded. */
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.32, ease: EASE_OUT }}
           >
             <div
               className="flex h-full flex-col justify-center gap-1"

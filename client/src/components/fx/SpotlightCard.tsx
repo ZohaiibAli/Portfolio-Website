@@ -2,6 +2,7 @@ import { useCallback, useRef, useState, type ReactNode } from "react";
 import { motion, useMotionTemplate, useMotionValue, useReducedMotion } from "framer-motion";
 import { alpha } from "@/lib/motion";
 import { useHoverRect } from "@/lib/useHoverRect";
+import { useHasFinePointer } from "@/lib/usePointer";
 import { useQuality } from "@/lib/useQuality";
 
 interface Props {
@@ -33,6 +34,14 @@ export default function SpotlightCard({
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const high = useQuality() === "high";
+  /* Touch has no hover, but it does have `pointerenter` — the browser fires it
+     for the element under the finger. So dragging a page-worth of these cards
+     past under a scrolling thumb ran the whole hover machinery anyway: a
+     `getBoundingClientRect` (a forced layout flush) and a React re-render per
+     card crossed, landing directly in the scroll gesture. There are sixteen of
+     these on the page. Not wiring the handlers is the fix; the styling they
+     drive is a pointer affordance that a touch device cannot use. */
+  const hoverable = useHasFinePointer() && !reduced;
   const [hovered, setHovered] = useState(false);
   const bounds = useHoverRect(ref);
 
@@ -83,9 +92,9 @@ export default function SpotlightCard({
     <div
       ref={ref}
       className={className}
-      onPointerMove={reduced ? undefined : onMove}
-      onPointerEnter={onEnter}
-      onPointerLeave={onLeave}
+      onPointerMove={hoverable && high ? onMove : undefined}
+      onPointerEnter={hoverable ? onEnter : undefined}
+      onPointerLeave={hoverable ? onLeave : undefined}
       style={{
         ...style,
         position: "relative",

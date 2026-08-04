@@ -68,8 +68,19 @@ function frame() {
   }
 }
 
+/**
+ * Touch devices have no pointer to track, so the store has nothing to publish —
+ * but the frame loop ran anyway, for the whole session, on exactly the hardware
+ * least able to spare it. Every consumer already hides its pointer-driven layer
+ * behind `useHasFinePointer`, so on a phone this loop was spinning to feed
+ * motion values that nothing was rendering.
+ */
+const HAS_POINTER =
+  typeof window === "undefined" ||
+  window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
 function attach() {
-  if (attached) return;
+  if (attached || !HAS_POINTER) return;
   attached = true;
   window.addEventListener("pointermove", onMove, { passive: true });
   raf = requestAnimationFrame(frame);

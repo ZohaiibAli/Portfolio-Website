@@ -13,6 +13,7 @@ import Marquee from "@/components/fx/Marquee";
 import { LiveDot } from "@/components/fx/SectionHeading";
 import GlowButton from "@/components/ui/GlowButton";
 import { usePointer } from "@/lib/usePointer";
+import { useAmbient, useMediaQuery, useScrollFx } from "@/lib/useAmbient";
 import { EASE_OUT, EASE_SOFT, EASE_INOUT } from "@/lib/motion";
 import { INTERNSHIPS_COMPLETED, PROJECTS_SHIPPED } from "@/lib/profile";
 
@@ -86,7 +87,6 @@ function useTypewriter(texts: string[], speed = 62, pause = 1900): string {
  */
 function TypedRole() {
   const role = useTypewriter(ROLES);
-  const reduced = useReducedMotion();
 
   return (
     <motion.div
@@ -105,12 +105,13 @@ function TypedRole() {
         }}
       >
         {role}
-        <motion.span
-          className="ml-1 inline-block align-middle"
-          style={{ width: 2, height: "1.05em", background: "#60A5FA" }}
-          animate={reduced ? undefined : { opacity: [1, 0, 1] }}
-          transition={{ duration: 1.05, repeat: Infinity, ease: "linear" }}
-        />
+        {/* The caret blink was a JS-driven opacity loop that never stopped. As
+            a CSS animation it runs off the main thread and costs the page
+            nothing — which matters here because it sits next to a typewriter
+            already committing a state update sixteen times a second. Same
+            treatment on every tier; there is no version of this worth a frame
+            budget. */}
+        <span className="caret ml-1 inline-block align-middle" />
       </span>
     </motion.div>
   );
@@ -221,12 +222,7 @@ function CodeEditor() {
               ))}
             </span>
             {i === lines - 1 && (
-              <motion.span
-                className="ml-0.5 inline-block"
-                style={{ width: 2, height: 15, background: "#60A5FA" }}
-                animate={{ opacity: [1, 0, 1] }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              />
+              <span className="caret ml-0.5 inline-block" style={{ height: 15 }} />
             )}
           </motion.div>
         ))}
@@ -261,7 +257,7 @@ interface MetricProps {
 }
 
 function Metric({ label, value, sub, color, delay, x, y, depth, px, py }: MetricProps) {
-  const reduced = useReducedMotion();
+  const ambient = useAmbient();
   // Cards at different depths drift by different amounts — parallax against
   // the editor behind them.
   const tx = useTransform(px, [0, 1], [depth, -depth]);
@@ -275,8 +271,8 @@ function Metric({ label, value, sub, color, delay, x, y, depth, px, py }: Metric
         top: y,
         translateX: "-50%",
         translateY: "-50%",
-        x: reduced ? 0 : tx,
-        y: reduced ? 0 : ty,
+        x: ambient ? tx : 0,
+        y: ambient ? ty : 0,
         zIndex: 20,
         minWidth: 132,
         padding: "12px 16px",
@@ -291,7 +287,7 @@ function Metric({ label, value, sub, color, delay, x, y, depth, px, py }: Metric
       transition={{ delay, duration: 0.7, ease: EASE_OUT }}
     >
       <motion.div
-        animate={reduced ? undefined : { y: [0, -5, 0] }}
+        animate={ambient ? { y: [0, -5, 0] } : undefined}
         transition={{ duration: 3.4 + delay, repeat: Infinity, ease: EASE_INOUT }}
       >
         <div
@@ -316,8 +312,16 @@ function Metric({ label, value, sub, color, delay, x, y, depth, px, py }: Metric
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const reduced = useReducedMotion();
+  const ambient = useAmbient();
+  const sink = useScrollFx();
   const { x, y } = usePointer();
+
+  /* The right column is `hidden lg:block`, and CSS `display: none` hides an
+     element without unmounting it: the code editor kept running its reveal
+     timer, three `Metric` cards kept subscribing to two springs each, and the
+     tilt card kept its listeners — all of it on phones, for a column nobody
+     could see. Matching the breakpoint in JS means it is simply not there. */
+  const wideEnoughForColumn = useMediaQuery("(min-width: 1024px)");
 
   // Pointer as a 0…1 fraction of the viewport, spring-damped. Computed per
   // frame rather than from a captured width, so it survives resizes.
@@ -325,8 +329,24 @@ export default function Hero() {
   const px = useSpring(useTransform(x, (v) => v / (window.innerWidth || 1)), damp);
   const py = useSpring(useTransform(y, (v) => v / (window.innerHeight || 1)), damp);
 
-  // The hero sinks away as the next section rises over it.
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  /* The hero sinks away as the next section rises over it.
+
+     `scale` on this subtree is the most expensive scroll-linked transform on
+     the page: it covers the headline, the paragraph, both buttons and the
+     ticker, so the browser re-rasterises a screenful of text at a new scale
+     factor on every frame — and it fires the instant the user makes their very
+     first scroll gesture, which is the frame that decides whether the site
+     feels smooth. The travel and fade would each be affordable alone, but they
+     ride the same subtree, so keeping them means keeping it promoted and
+     re-composited for the whole of that first gesture anyway — the hero simply
+     scrolls away below the high tier.
+
+     Which makes the element-targeted tracking dead weight too: it measures the
+     hero's box every scroll frame to produce numbers nothing reads. See the
+     note in `Section`. */
+  const { scrollYProgress } = useScroll(
+    sink ? { target: ref, offset: ["start start", "end start"] } : {}
+  );
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "26%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
   const contentScale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
@@ -345,9 +365,9 @@ export default function Hero() {
           maxWidth: 1200,
           paddingLeft: "clamp(1.25rem, 5vw, 4rem)",
           paddingRight: "clamp(1.25rem, 5vw, 4rem)",
-          y: reduced ? 0 : contentY,
-          opacity: reduced ? 1 : contentOpacity,
-          scale: reduced ? 1 : contentScale,
+          y: sink ? contentY : 0,
+          opacity: sink ? contentOpacity : 1,
+          scale: sink ? contentScale : 1,
         }}
       >
         {/* ── Left column ──────────────────────────────────────────────── */}
@@ -443,8 +463,9 @@ export default function Hero() {
         </div>
 
         {/* ── Right column ─────────────────────────────────────────────── */}
+        {wideEnoughForColumn && (
         <motion.div
-          className="relative hidden flex-1 lg:block"
+          className="relative flex-1"
           style={{ minHeight: 440 }}
           initial={{ opacity: 0, x: 60, scale: 0.97 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -456,7 +477,7 @@ export default function Hero() {
 
           <TiltCard max={10} lift={30} style={{ borderRadius: 16 }}>
             <motion.div
-              animate={reduced ? undefined : { y: [0, -8, 0] }}
+              animate={ambient ? { y: [0, -8, 0] } : undefined}
               transition={{ duration: 8, repeat: Infinity, ease: EASE_INOUT }}
             >
               <CodeEditor />
@@ -503,6 +524,7 @@ export default function Hero() {
             }}
           />
         </motion.div>
+        )}
       </motion.div>
 
       {/* Scroll cue */}
@@ -523,11 +545,12 @@ export default function Hero() {
           scroll
         </span>
         <span className="relative block overflow-hidden" style={{ width: 1, height: 40, background: "rgba(96,165,250,0.15)" }}>
-          <motion.span
-            className="absolute inset-x-0"
+          {/* CSS rather than a motion loop: it is a permanent animation on a
+              1px element, and there is no reason for it to hold a slot on the
+              main thread's frame loop for the life of the page. */}
+          <span
+            className="scroll-cue absolute inset-x-0"
             style={{ height: 14, background: "linear-gradient(180deg, transparent, #60A5FA)" }}
-            animate={reduced ? undefined : { y: [-14, 40] }}
-            transition={{ duration: 1.9, repeat: Infinity, ease: EASE_INOUT }}
           />
         </span>
       </motion.a>

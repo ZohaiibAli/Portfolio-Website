@@ -1,7 +1,8 @@
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
 import ParticleCanvas from "./ParticleCanvas";
 import { usePointer, useHasFinePointer } from "@/lib/usePointer";
 import { useQuality } from "@/lib/useQuality";
+import { useAmbient, useScrollFx } from "@/lib/useAmbient";
 import { EASE_INOUT } from "@/lib/motion";
 
 /* Procedural grain — a data URI so the strict-CSP-friendly build ships no
@@ -24,6 +25,8 @@ interface BlobProps {
   duration: number;
   delay?: number;
   drift: [number, number];
+  /** False holds the lobe still — see the note on `Blob`. */
+  animated: boolean;
 }
 
 /**
@@ -35,14 +38,20 @@ interface BlobProps {
  * a translate rather than a change in blur radius. The gradient's own falloff
  * does most of the softening; the blur only kills banding, so it can be far
  * smaller than it looks like it needs to be.
+ *
+ * The drift stops entirely on the low tier. A lobe is 820px of blurred gradient
+ * sitting under every other layer on the page, and animating its `scale` means
+ * the compositor re-rasterises that blur on every frame for the whole session —
+ * the one animation on the site that is guaranteed to be running no matter what
+ * the user is looking at. Held still it costs a single upload at mount, and the
+ * aurora still reads as an aurora because the colour, not the motion, is what
+ * anyone actually registers.
  */
-function Blob({ color, size, left, top, duration, delay = 0, drift }: BlobProps) {
-  const reduced = useReducedMotion();
-
+function Blob({ color, size, left, top, duration, delay = 0, drift, animated }: BlobProps) {
   return (
     <motion.div
       aria-hidden="true"
-      className="absolute rounded-full gpu"
+      className={`absolute rounded-full${animated ? " gpu" : ""}`}
       style={{
         left,
         top,
@@ -52,16 +61,17 @@ function Blob({ color, size, left, top, duration, delay = 0, drift }: BlobProps)
         filter: "blur(14px)",
         translateX: "-50%",
         translateY: "-50%",
+        opacity: animated ? undefined : 0.7,
       }}
       animate={
-        reduced
-          ? undefined
-          : {
+        animated
+          ? {
               x: [0, drift[0], -drift[0] * 0.6, 0],
               y: [0, drift[1], -drift[1] * 0.7, 0],
               scale: [1, 1.18, 0.94, 1],
               opacity: [0.55, 0.9, 0.5, 0.55],
             }
+          : undefined
       }
       transition={{ duration, delay, repeat: Infinity, ease: EASE_INOUT }}
     />
@@ -76,14 +86,29 @@ function Blob({ color, size, left, top, duration, delay = 0, drift }: BlobProps)
  * aurora → grid → particles → cursor spotlight → grain → vignette.
  */
 export default function SceneBackground() {
-  const reduced = useReducedMotion();
   const high = useQuality() === "high";
+  const ambient = useAmbient();
+  const parallaxOn = useScrollFx();
   const fine = useHasFinePointer();
   const { sx, sy } = usePointer();
   const { scrollYProgress } = useScroll();
 
-  // The aurora field drifts slightly as the page scrolls: cheap depth.
-  const parallax = useSpring(scrollYProgress, { stiffness: 40, damping: 22 });
+  /* The aurora field drifts slightly as the page scrolls: cheap depth.
+
+     Cheap on a desktop. On a phone the spring keeps running for a beat after
+     the finger lifts — the exact window where momentum scrolling is still
+     asking the compositor for frames — and it moves two full-viewport layers
+     to do it. Off below the high tier.
+
+     Not applying the output was not enough to stop the spring: it animates
+     whenever its source moves, so it kept integrating on every scroll frame to
+     produce a number the styles below were throwing away. A source that never
+     changes is what actually parks it. */
+  const still = useMotionValue(0);
+  const parallax = useSpring(parallaxOn ? scrollYProgress : still, {
+    stiffness: 40,
+    damping: 22,
+  });
   const auroraY = useTransform(parallax, [0, 1], ["0%", "-14%"]);
   const gridY = useTransform(parallax, [0, 1], ["0%", "-6%"]);
 
@@ -99,23 +124,27 @@ export default function SceneBackground() {
           forces its whole subtree — four large blurred lobes — to re-render
           with it. The colour shift was worth a few degrees of hue and cost
           more than everything else on this layer combined. */}
-      <motion.div className="absolute inset-0" style={{ y: reduced ? 0 : auroraY }}>
-        <Blob color="rgba(37,99,235,0.30)" size={820} left="18%" top="12%" duration={26} drift={[70, 50]} />
-        <Blob color="rgba(124,58,237,0.24)" size={720} left="82%" top="26%" duration={31} delay={2} drift={[-80, 60]} />
+      <motion.div className="absolute inset-0" style={{ y: parallaxOn ? auroraY : 0 }}>
+        <Blob color="rgba(37,99,235,0.30)" size={820} left="18%" top="12%" duration={26} drift={[70, 50]} animated={ambient} />
+        <Blob color="rgba(124,58,237,0.24)" size={720} left="82%" top="26%" duration={31} delay={2} drift={[-80, 60]} animated={ambient} />
         {/* The back two lobes are the least legible and the largest to
             composite — high tier only. */}
         {high && (
           <>
-            <Blob color="rgba(34,211,238,0.18)" size={640} left="62%" top="72%" duration={35} delay={4} drift={[60, -70]} />
-            <Blob color="rgba(52,211,153,0.16)" size={560} left="12%" top="82%" duration={29} delay={1.5} drift={[-50, -55]} />
+            <Blob color="rgba(34,211,238,0.18)" size={640} left="62%" top="72%" duration={35} delay={4} drift={[60, -70]} animated={ambient} />
+            <Blob color="rgba(52,211,153,0.16)" size={560} left="12%" top="82%" duration={29} delay={1.5} drift={[-50, -55]} animated={ambient} />
           </>
         )}
       </motion.div>
 
-      {/* ── Grid ───────────────────────────────────────────────────────── */}
+      {/* ── Grid ─────────────────────────────────────────────────────────
+          The radial `mask` is what makes this expensive to move: masked
+          content is composited through a second surface, so a scroll-linked
+          `y` re-composites the full viewport every frame. Held still it is
+          rasterised once and never touched again. */}
       <motion.svg
         className="absolute"
-        style={{ y: reduced ? 0 : gridY, left: 0, top: "-8%", width: "100%", height: "118%", opacity: 0.07 }}
+        style={{ y: parallaxOn ? gridY : 0, left: 0, top: "-8%", width: "100%", height: "118%", opacity: 0.07 }}
       >
         <defs>
           <pattern id="scene-grid" width="64" height="64" patternUnits="userSpaceOnUse">

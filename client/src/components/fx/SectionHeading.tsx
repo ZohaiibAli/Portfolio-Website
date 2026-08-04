@@ -1,6 +1,7 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import SplitText from "./SplitText";
 import Reveal from "./Reveal";
+import { useAmbient } from "@/lib/useAmbient";
 
 interface Props {
   /** Monospace eyebrow inside the status pill, e.g. `about.me`. */
@@ -13,9 +14,18 @@ interface Props {
   align?: "center" | "left";
 }
 
-/** The live green dot shared by every eyebrow pill and status row. */
+/**
+ * The live green dot shared by every eyebrow pill and status row.
+ *
+ * The halo is the most-duplicated animation on the site — every section
+ * heading, the hero badge, the code editor's status line, the profile card,
+ * a dozen in total, all looping forever whether or not their section is
+ * anywhere near the viewport. Framer keeps every one of them on its frame
+ * loop, so the cost is paid on the frames the user is scrolling. On the low
+ * tier the dot keeps its glow and drops the pulse.
+ */
 export function LiveDot({ color = "#34D399", size = 8 }: { color?: string; size?: number }) {
-  const reduced = useReducedMotion();
+  const ambient = useAmbient();
   return (
     <span style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
       <span
@@ -27,7 +37,7 @@ export function LiveDot({ color = "#34D399", size = 8 }: { color?: string; size?
           boxShadow: `0 0 8px ${color}`,
         }}
       />
-      {!reduced && (
+      {ambient && (
         <motion.span
           style={{ position: "absolute", inset: 0, borderRadius: "50%", background: color }}
           animate={{ scale: [1, 2.4], opacity: [0.55, 0] }}
