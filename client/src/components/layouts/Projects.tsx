@@ -30,7 +30,8 @@ interface Project {
   github: string | null;
 }
 
-// Order matches the resume: HelpGhar → AI Dataset Cleaner → ServiceHub.
+/* Order matches the resume — HelpGhar → AI Dataset Cleaner → CodeChronicle —
+   with ServiceHub last, since it is the one build the resume doesn't list. */
 const PROJECTS: Project[] = [
   {
     id: "helpghar",
@@ -70,9 +71,29 @@ const PROJECTS: Project[] = [
     accent: "#F59E0B",
     tags: ["Streamlit", "Python", "Pandas", "Data Cleaning"],
     icon: "◆",
-    // Runs locally as a Streamlit app; nothing deployed to screenshot.
-    preview: null,
-    liveDemo: null,
+    preview: "dataset-cleaner",
+    liveDemo: "https://raw2ready-ai.streamlit.app/",
+    github: null,
+  },
+  {
+    id: "codechronicle",
+    name: "CodeChronicle",
+    subtitle: "AI Repository Analysis & Code Intelligence",
+    year: "2026",
+    description:
+      "Full-stack platform that connects to GitHub, GitLab and Bitbucket repositories and automatically analyses codebase architecture, commit history and development patterns — surfacing potential defects and rendering the whole system as an interactive architecture graph.",
+    features: [
+      "Connects to GitHub, GitLab and Bitbucket and analyses architecture, commit history and development patterns",
+      "AI-powered code intelligence detecting potential defects, with categorised issue filtering",
+      "Interactive visualisations of repository architecture and development insights",
+      "Actionable output letting teams evaluate project structure, code quality and history at a glance",
+    ],
+    gradient: "linear-gradient(135deg, #07101a 0%, #0a1826 42%, #0d2033 100%)",
+    accent: "#60A5FA",
+    tags: ["React.js", "FastAPI", "Python", "Code Intelligence", "Data Viz"],
+    icon: "◉",
+    preview: "codechronicle",
+    liveDemo: "https://living-system-architecture-48kw.vercel.app/",
     github: null,
   },
   {
