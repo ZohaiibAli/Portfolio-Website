@@ -159,6 +159,75 @@
   .scroll-cue {
     animation: scroll-cue 1.9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   }
+
+  /*
+    ── System graph ────────────────────────────────────────────────────────
+    Both of these are CSS for the reason spelled out on `.caret`: they run
+    forever, and a `repeat: Infinity` Framer animation would hold a slot on the
+    main thread's frame loop for the whole session to do it. There are nine of
+    them in the hero's graph alone.
+
+    Applied by `SystemGraph` only on the high tier — see the note there.
+  */
+
+  /*
+    A packet of data crossing an edge.
+
+    `offset-path` is what makes this affordable. The alternative — keyframing
+    `translate` along each edge — means hand-computing the curve for every one
+    of them and rewriting all of it the moment a node moves a pixel. Here the
+    edge's own `d` string is handed to both the `<path>` and the packet, so the
+    geometry is declared once and they cannot drift apart. Chrome composites
+    `offset-distance`, so the travel itself is free.
+
+    Guarded by `@supports` rather than shipped bare: without `offset-path` a
+    packet ignores the property entirely and parks itself in the corner of the
+    graph as a stray glowing dot. Browsers that lack it get the diagram with no
+    traffic on it, which is a diagram — not a bug.
+  */
+  .packet {
+    opacity: 0;
+  }
+
+  @supports (offset-path: path("M 0 0 L 1 1")) {
+    .packet {
+      offset-rotate: 0deg;
+      animation: packet 2.2s linear infinite;
+    }
+  }
+
+  /* The ring a node throws off as a packet lands on it. */
+  .node-pulse {
+    animation: node-pulse 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  }
+
+  /*
+    One-shot specular sweep across the headline, fired after the letters land.
+
+    This one is *not* free: `background-position` on `background-clip: text`
+    repaints the glyphs every frame. It is bounded — 1.1s, once, never again —
+    which is what makes it affordable at all, and it is still high-tier only,
+    because the frames it costs are the frames the hero is entering on.
+  */
+  .name-sweep {
+    background: linear-gradient(
+      100deg,
+      var(--text) 0%,
+      var(--text) 38%,
+      #a5f3fc 47%,
+      #38bdf8 52%,
+      var(--text) 62%,
+      var(--text) 100%
+    );
+    background-size: 260% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Held until 1.75s: the headline's last glyph starts at 0.70s and takes
+       0.85s to land, and a sweep running while the letters are still
+       translating slides the highlight against their motion. */
+    animation: name-sweep 1.15s cubic-bezier(0.4, 0, 0.2, 1) 1.75s both;
+  }
 }
 
 @keyframes caret-blink {
@@ -178,6 +247,49 @@
   }
   to {
     transform: translateY(40px);
+  }
+}
+
+/* Fades in off the source node and out into the target, so neither end shows
+   the packet appearing from nothing on top of a node. */
+@keyframes packet {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  14% {
+    opacity: 1;
+  }
+  86% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes node-pulse {
+  0%,
+  55% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  62% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes name-sweep {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -110% 0;
   }
 }
 

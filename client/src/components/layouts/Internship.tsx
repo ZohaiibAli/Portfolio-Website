@@ -512,7 +512,7 @@ export default function Internship() {
                   scaleY: fillOn ? fill : 1,
                   transformOrigin: "top",
                   borderRadius: 999,
-                  background: "linear-gradient(to bottom, #2563EB, #22D3EE, #0EA5E9)",
+                  background: "linear-gradient(to bottom, #1D4ED8, #38BDF8, #22D3EE)",
                   boxShadow: "0 0 14px rgba(37,99,235,0.6)",
                   opacity: 0.65,
                 }}

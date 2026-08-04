@@ -57,7 +57,7 @@ export default function GlowButton({
     background: disabled
       ? "rgba(96,165,250,0.07)"
       : primary
-      ? "linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%)"
+      ? "linear-gradient(135deg, #1D4ED8 0%, #2563EB 42%, #0EA5E9 100%)"
       : "rgba(96,165,250,0.05)",
     color: disabled ? "#2E4560" : primary ? "#fff" : "#8FA8C8",
     backdropFilter: primary ? undefined : "blur(10px)",

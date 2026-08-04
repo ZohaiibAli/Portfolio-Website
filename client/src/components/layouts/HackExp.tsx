@@ -297,7 +297,7 @@ export default function HackExp() {
             scaleY: fillOn ? fill : 1,
             transformOrigin: "top",
             borderRadius: 999,
-            background: "linear-gradient(to bottom, #2563EB, #22D3EE, #0EA5E9)",
+            background: "linear-gradient(to bottom, #1D4ED8, #38BDF8, #22D3EE)",
             boxShadow: "0 0 14px rgba(37,99,235,0.6), 0 0 34px rgba(37,99,235,0.25)",
           }}
         />
@@ -381,7 +381,7 @@ export default function HackExp() {
             className="absolute inset-x-0 top-0"
             style={{
               borderRadius: 999,
-              background: "linear-gradient(to bottom, #2563EB, #22D3EE, #0EA5E9)",
+              background: "linear-gradient(to bottom, #1D4ED8, #38BDF8, #22D3EE)",
               boxShadow: "0 0 12px rgba(37,99,235,0.55)",
             }}
             initial={{ height: "0%" }}

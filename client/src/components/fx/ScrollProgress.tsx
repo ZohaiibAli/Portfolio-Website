@@ -50,7 +50,7 @@ export default function ScrollProgress() {
         className="h-full origin-left"
         style={{
           scaleX,
-          background: "linear-gradient(90deg, #2563EB 0%, #22D3EE 50%, #7DD3FC 100%)",
+          background: "linear-gradient(90deg, #1D4ED8 0%, #38BDF8 50%, #22D3EE 100%)",
           boxShadow: "0 0 12px rgba(37,99,235,0.7)",
         }}
       />

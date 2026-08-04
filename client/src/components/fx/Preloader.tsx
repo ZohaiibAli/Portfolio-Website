@@ -67,7 +67,7 @@ function ProgressReadout({ onDone }: { onDone: () => void }) {
         <div
           className="absolute inset-y-0 left-0"
           style={{
-            background: "linear-gradient(90deg, #2563EB, #22D3EE, #7DD3FC)",
+            background: "linear-gradient(90deg, #1D4ED8, #38BDF8, #A5F3FC)",
             boxShadow: "0 0 14px rgba(37,99,235,0.8)",
             width: `${count}%`,
           }}
