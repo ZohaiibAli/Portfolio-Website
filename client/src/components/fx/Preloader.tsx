@@ -63,11 +63,11 @@ function ProgressReadout({ onDone }: { onDone: () => void }) {
   return (
     <>
       {/* Loading rail */}
-      <div className="relative" style={{ width: "min(58vw, 300px)", height: 1, background: "rgba(255,255,255,0.09)" }}>
+      <div className="relative" style={{ width: "min(58vw, 300px)", height: 1, background: "rgba(96,165,250,0.15)" }}>
         <div
           className="absolute inset-y-0 left-0"
           style={{
-            background: "linear-gradient(90deg, #2563EB, #22D3EE, #A78BFA)",
+            background: "linear-gradient(90deg, #2563EB, #22D3EE, #7DD3FC)",
             boxShadow: "0 0 14px rgba(37,99,235,0.8)",
             width: `${count}%`,
           }}
@@ -76,7 +76,7 @@ function ProgressReadout({ onDone }: { onDone: () => void }) {
 
       <div
         className="mono flex w-full items-center justify-between"
-        style={{ width: "min(58vw, 300px)", fontSize: 11, letterSpacing: "0.18em", color: "#334155" }}
+        style={{ width: "min(58vw, 300px)", fontSize: 11, letterSpacing: "0.18em", color: "#2E4560" }}
       >
         <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
           BUILDING INTERFACE
@@ -128,7 +128,7 @@ export default function Preloader({ onDone }: Props) {
                 key={i}
                 className="h-full flex-1"
                 // Sweep upward: the panel collapses toward its top edge.
-                style={{ background: "#060A12", transformOrigin: "top" }}
+                style={{ background: "#03060F", transformOrigin: "top" }}
                 initial={{ scaleY: 1 }}
                 animate={{ scaleY: 1 }}
                 exit={{ scaleY: 0 }}

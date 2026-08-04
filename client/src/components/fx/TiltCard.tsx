@@ -58,7 +58,7 @@ export default function TiltCard({
   // Glare origin in percentages, ready for a radial-gradient.
   const gx = useTransform(px, [-0.5, 0.5], ["0%", "100%"]);
   const gy = useTransform(py, [-0.5, 0.5], ["0%", "100%"]);
-  const glareBg = useMotionTemplate`radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.04) 26%, transparent 58%)`;
+  const glareBg = useMotionTemplate`radial-gradient(circle at ${gx} ${gy}, rgba(255,255,255,0.16) 0%, rgba(96,165,250,0.06) 26%, transparent 58%)`;
 
   const onMove = useCallback(
     (e: React.PointerEvent) => {

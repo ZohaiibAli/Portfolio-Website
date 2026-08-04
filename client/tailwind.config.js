@@ -4,22 +4,28 @@ module.exports = {
   content: ["./src/**/*.{ts,tsx}", "./index.html"],
   theme: {
     extend: {
+      // Mirrors the custom properties in `index.css` — see the theme note there.
       colors: {
-        ink: "#060A12",
-        surface: "#0D1117",
-        hairline: "rgba(255,255,255,0.07)",
+        ink: "#03060F",
+        abyss: "#01030A",
+        surface: "#070C1A",
+        hairline: "rgba(96,165,250,0.13)",
         brand: {
-          blue: "#60A5FA",
+          royal: "#1D4ED8",
           deep: "#2563EB",
+          blue: "#3B82F6",
+          soft: "#60A5FA",
+          sky: "#38BDF8",
+          skysoft: "#7DD3FC",
           cyan: "#22D3EE",
+          ice: "#A5F3FC",
           green: "#34D399",
-          violet: "#7C3AED",
           amber: "#F59E0B",
         },
-        ink0: "#F1F5F9",
-        ink1: "#94A3B8",
-        ink2: "#64748B",
-        ink3: "#334155",
+        ink0: "#E9F1FF",
+        ink1: "#8FA8C8",
+        ink2: "#607E9E",
+        ink3: "#2E4560",
       },
       fontFamily: {
         display: ["Sora", "system-ui", "sans-serif"],

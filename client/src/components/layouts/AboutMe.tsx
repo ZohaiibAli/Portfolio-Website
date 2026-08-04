@@ -16,7 +16,7 @@ const STACK = ["React.js", "TypeScript", "Node.js", "Express.js", "FastAPI", "Mo
 const STATS = [
   { value: `${INTERNSHIPS_COMPLETED}+`, label: "Internships", color: "#60A5FA" },
   { value: PROJECTS_SHIPPED, label: "Projects", color: "#34D399" },
-  { value: "3+", label: "Tech Stacks", color: "#A78BFA" },
+  { value: "3+", label: "Tech Stacks", color: "#7DD3FC" },
 ];
 
 /** A chip that hovers off the corner of the portrait. */
@@ -43,7 +43,7 @@ function FloatingChip({
       style={{
         ...position,
         zIndex: 5,
-        background: "rgba(10,14,22,0.86)",
+        background: "rgba(6,11,24,0.86)",
         border: `1px solid ${color}33`,
         backdropFilter: "blur(18px)",
         boxShadow: `0 0 24px ${color}1f, 0 12px 36px rgba(0,0,0,0.5)`,
@@ -67,7 +67,7 @@ function FloatingChip({
         >
           {title}
         </span>
-        <span className="mono block" style={{ fontSize: 10, color: "#475569", lineHeight: 1.3 }}>
+        <span className="mono block" style={{ fontSize: 10, color: "#455C78", lineHeight: 1.3 }}>
           {sub}
         </span>
       </span>
@@ -128,7 +128,7 @@ export default function AboutMe() {
                     inset: -26,
                     opacity: 0.3,
                     background:
-                      "radial-gradient(ellipse, #2563EB 0%, #7C3AED 42%, transparent 74%)",
+                      "radial-gradient(ellipse, #2563EB 0%, #0EA5E9 42%, transparent 74%)",
                   }}
                 />
 
@@ -146,7 +146,7 @@ export default function AboutMe() {
                       inset: -2,
                       padding: 1,
                       background:
-                        "conic-gradient(from 0deg, transparent 0deg, rgba(96,165,250,0.75) 60deg, rgba(167,139,250,0.75) 120deg, transparent 200deg)",
+                        "conic-gradient(from 0deg, transparent 0deg, rgba(96,165,250,0.75) 60deg, rgba(125,211,252,0.75) 120deg, transparent 200deg)",
                       WebkitMask: "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
                       WebkitMaskComposite: "xor",
                       maskComposite: "exclude",
@@ -196,7 +196,7 @@ export default function AboutMe() {
                     className="absolute inset-0"
                     style={{
                       background:
-                        "linear-gradient(to top, rgba(6,10,18,0.88) 0%, transparent 48%)",
+                        "linear-gradient(to top, rgba(3,6,15,0.88) 0%, transparent 48%)",
                     }}
                   />
 
@@ -204,7 +204,7 @@ export default function AboutMe() {
                     <span
                       className="mono inline-flex items-center gap-2 rounded-lg px-3 py-1.5"
                       style={{
-                        background: "rgba(6,10,18,0.78)",
+                        background: "rgba(3,6,15,0.78)",
                         border: "1px solid rgba(96,165,250,0.18)",
                         backdropFilter: "blur(12px)",
                         fontSize: 11,
@@ -248,7 +248,7 @@ export default function AboutMe() {
               fontWeight: 700,
               letterSpacing: "-0.045em",
               lineHeight: 1.08,
-              color: "#F1F5F9",
+              color: "#E9F1FF",
             }}
           >
             <SplitText text="Crafting systems that" stagger={0.02} />{" "}
@@ -256,10 +256,10 @@ export default function AboutMe() {
           </h2>
 
           <Reveal delay={0.15}>
-            <p style={{ maxWidth: 520, color: "#64748B", lineHeight: 1.85, fontSize: "clamp(0.95rem, 2.2vw, 1.08rem)" }}>
+            <p style={{ maxWidth: 520, color: "#607E9E", lineHeight: 1.85, fontSize: "clamp(0.95rem, 2.2vw, 1.08rem)" }}>
               Full Stack Developer specializing in{" "}
-              <span style={{ color: "#94A3B8" }}>scalable web applications</span> and{" "}
-              <span style={{ color: "#94A3B8" }}>RAG/ML-powered features</span>. I turn complex
+              <span style={{ color: "#8FA8C8" }}>scalable web applications</span> and{" "}
+              <span style={{ color: "#8FA8C8" }}>RAG/ML-powered features</span>. I turn complex
               problems into simple, reliable, user-centric solutions.
             </p>
           </Reveal>
@@ -293,7 +293,7 @@ export default function AboutMe() {
                   />
                   <span
                     className="mono"
-                    style={{ fontSize: 10.5, color: "#475569", letterSpacing: "0.14em", textTransform: "uppercase" }}
+                    style={{ fontSize: 10.5, color: "#455C78", letterSpacing: "0.14em", textTransform: "uppercase" }}
                   >
                     {s.label}
                   </span>

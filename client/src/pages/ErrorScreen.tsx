@@ -68,7 +68,7 @@ export default function ErrorScreen({ code, title, message, accent = "#60A5FA" }
               fontFamily: "var(--font-display)",
               fontSize: "clamp(1.2rem, 4vw, 1.7rem)",
               fontWeight: 700,
-              color: "#F1F5F9",
+              color: "#E9F1FF",
               letterSpacing: "-0.035em",
             }}
           >
@@ -79,7 +79,7 @@ export default function ErrorScreen({ code, title, message, accent = "#60A5FA" }
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.45, ease: EASE_OUT }}
-            style={{ margin: "14px 0 32px", maxWidth: 420, color: "#64748B", lineHeight: 1.8, fontSize: 15 }}
+            style={{ margin: "14px 0 32px", maxWidth: 420, color: "#607E9E", lineHeight: 1.8, fontSize: 15 }}
           >
             {message}
           </motion.p>

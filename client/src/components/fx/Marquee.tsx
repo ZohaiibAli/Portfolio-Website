@@ -31,9 +31,9 @@ const CHIP: React.CSSProperties = {
   padding: "6px 16px",
   fontSize: 12,
   letterSpacing: "0.06em",
-  color: "#64748B",
-  background: "rgba(255,255,255,0.035)",
-  border: "1px solid rgba(255,255,255,0.07)",
+  color: "#607E9E",
+  background: "rgba(96,165,250,0.055)",
+  border: "1px solid rgba(96,165,250,0.13)",
 };
 
 /** The track renders two copies, so a 50% span loops seamlessly. */

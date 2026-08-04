@@ -34,9 +34,9 @@ export default function Tag({ label, index = 0, accent, size = "md" }: Props) {
         padding: size === "sm" ? "3px 9px" : "5px 13px",
         fontSize: size === "sm" ? 10.5 : 11.5,
         letterSpacing: "0.05em",
-        color: "#64748B",
-        background: "rgba(255,255,255,0.035)",
-        border: "1px solid rgba(255,255,255,0.075)",
+        color: "#607E9E",
+        background: "rgba(96,165,250,0.055)",
+        border: "1px solid rgba(96,165,250,0.14)",
       }}
     >
       {label}

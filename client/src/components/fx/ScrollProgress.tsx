@@ -50,7 +50,7 @@ export default function ScrollProgress() {
         className="h-full origin-left"
         style={{
           scaleX,
-          background: "linear-gradient(90deg, #2563EB 0%, #22D3EE 50%, #A78BFA 100%)",
+          background: "linear-gradient(90deg, #2563EB 0%, #22D3EE 50%, #7DD3FC 100%)",
           boxShadow: "0 0 12px rgba(37,99,235,0.7)",
         }}
       />
@@ -61,8 +61,8 @@ export default function ScrollProgress() {
             x: headX,
             translateX: "-50%",
             translateY: "-50%",
-            background: "#A78BFA",
-            boxShadow: "0 0 16px rgba(167,139,250,0.9), 0 0 32px rgba(37,99,235,0.5)",
+            background: "#7DD3FC",
+            boxShadow: "0 0 16px rgba(125,211,252,0.9), 0 0 32px rgba(37,99,235,0.5)",
           }}
         />
       )}

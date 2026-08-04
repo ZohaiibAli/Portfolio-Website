@@ -58,7 +58,7 @@ function Logo({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
             style={{
               borderRadius: 11,
               background:
-                "linear-gradient(140deg, rgba(96,165,250,0.55) 0%, rgba(124,58,237,0.4) 52%, rgba(34,211,238,0.45) 100%)",
+                "linear-gradient(140deg, rgba(96,165,250,0.55) 0%, rgba(14,165,233,0.4) 52%, rgba(34,211,238,0.45) 100%)",
             }}
           />
           {/* Lit ring — same geometry at full saturation, cross-faded on hover
@@ -68,7 +68,7 @@ function Logo({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
             className="absolute inset-0"
             style={{
               borderRadius: 11,
-              background: "linear-gradient(140deg, #60A5FA 0%, #7C3AED 52%, #22D3EE 100%)",
+              background: "linear-gradient(140deg, #60A5FA 0%, #0EA5E9 52%, #22D3EE 100%)",
               boxShadow: "0 0 18px rgba(96,165,250,0.45)",
             }}
             animate={{ opacity: hovered ? 1 : 0 }}
@@ -82,8 +82,8 @@ function Logo({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
             style={{
               inset: 1,
               borderRadius: 10,
-              background: "linear-gradient(155deg, #0B1220 0%, #121B2C 100%)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07)",
+              background: "linear-gradient(155deg, #050A18 0%, #0C1730 100%)",
+              boxShadow: "inset 0 1px 0 rgba(96,165,250,0.13)",
             }}
           />
           <span
@@ -138,7 +138,7 @@ function Logo({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
               textTransform: "uppercase",
               whiteSpace: "nowrap",
               lineHeight: 1,
-              color: hovered ? "#60A5FA" : "#3E4C5E",
+              color: hovered ? "#60A5FA" : "#3B5470",
               transition: "color 280ms ease",
             }}
           >
@@ -205,7 +205,7 @@ function NavLink({ label, href, active, onClick }: LinkProps) {
           style={{
             fontSize: 12,
             letterSpacing: "0.04em",
-            color: active ? "#E2E8F0" : hovered ? "#94A3B8" : "#4B5563",
+            color: active ? "#D7E5FB" : hovered ? "#8FA8C8" : "#465A73",
             fontWeight: active ? 600 : 400,
             transition: "color 220ms ease",
           }}
@@ -224,7 +224,7 @@ function Burger({ open }: { open: boolean }) {
     display: "block",
     height: 1.5,
     borderRadius: 999,
-    background: "#CBD5E1",
+    background: "#BFD3EF",
   } as const;
 
   return (
@@ -334,7 +334,7 @@ export default function Navbar() {
         style={{
           zIndex: 9998,
           height: NAV_HEIGHT,
-          background: scrolled ? "rgba(6,10,18,0.72)" : "transparent",
+          background: scrolled ? "rgba(3,6,15,0.72)" : "transparent",
           backdropFilter: scrolled ? "blur(22px) saturate(170%)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(22px) saturate(170%)" : "none",
           borderBottom: `1px solid ${scrolled ? "rgba(96,165,250,0.11)" : "transparent"}`,
@@ -381,7 +381,7 @@ export default function Navbar() {
                     letterSpacing: "0.04em",
                     color: "#fff",
                     textDecoration: "none",
-                    background: "linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)",
+                    background: "linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%)",
                     boxShadow: "0 0 24px rgba(37,99,235,0.34)",
                   }}
                 >
@@ -405,7 +405,7 @@ export default function Navbar() {
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               style={{
-                background: open ? "rgba(96,165,250,0.1)" : "rgba(255,255,255,0.03)",
+                background: open ? "rgba(96,165,250,0.1)" : "rgba(96,165,250,0.05)",
                 border: "1px solid rgba(255,255,255,0.08)",
                 lineHeight: 0,
               }}
@@ -454,7 +454,7 @@ export default function Navbar() {
                   >
                     <span
                       className="mono"
-                      style={{ fontSize: 11, color: isActive ? "#60A5FA" : "#1E3A5F", minWidth: 24 }}
+                      style={{ fontSize: 11, color: isActive ? "#60A5FA" : "#1B3B6B", minWidth: 24 }}
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
@@ -464,7 +464,7 @@ export default function Navbar() {
                         fontSize: "clamp(1.8rem, 8vw, 2.8rem)",
                         fontWeight: 700,
                         letterSpacing: "-0.04em",
-                        color: isActive ? "#F1F5F9" : "#475569",
+                        color: isActive ? "#E9F1FF" : "#455C78",
                       }}
                     >
                       {l.label}
@@ -500,7 +500,7 @@ export default function Navbar() {
                   letterSpacing: "0.06em",
                   color: "#fff",
                   textDecoration: "none",
-                  background: "linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)",
+                  background: "linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%)",
                   boxShadow: "0 0 30px rgba(37,99,235,0.32)",
                 }}
               >

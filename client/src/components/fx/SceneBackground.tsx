@@ -116,7 +116,7 @@ export default function SceneBackground() {
     <div
       aria-hidden="true"
       className="pointer-events-none fixed inset-0 overflow-hidden"
-      style={{ zIndex: 0, backgroundColor: "#060A12" }}
+      style={{ zIndex: 0, backgroundColor: "#03060F" }}
     >
       {/* ── Aurora ───────────────────────────────────────────────────────
           The container used to carry a scroll-linked `hue-rotate`. A filter on
@@ -126,7 +126,7 @@ export default function SceneBackground() {
           more than everything else on this layer combined. */}
       <motion.div className="absolute inset-0" style={{ y: parallaxOn ? auroraY : 0 }}>
         <Blob color="rgba(37,99,235,0.30)" size={820} left="18%" top="12%" duration={26} drift={[70, 50]} animated={ambient} />
-        <Blob color="rgba(124,58,237,0.24)" size={720} left="82%" top="26%" duration={31} delay={2} drift={[-80, 60]} animated={ambient} />
+        <Blob color="rgba(14,165,233,0.24)" size={720} left="82%" top="26%" duration={31} delay={2} drift={[-80, 60]} animated={ambient} />
         {/* The back two lobes are the least legible and the largest to
             composite — high tier only. */}
         {high && (
@@ -183,7 +183,7 @@ export default function SceneBackground() {
             marginLeft: -380,
             marginTop: -380,
             background:
-              "radial-gradient(circle, rgba(96,165,250,0.10) 0%, rgba(124,58,237,0.05) 38%, transparent 68%)",
+              "radial-gradient(circle, rgba(96,165,250,0.10) 0%, rgba(14,165,233,0.05) 38%, transparent 68%)",
           }}
         />
       )}
@@ -207,7 +207,7 @@ export default function SceneBackground() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 120% 80% at 50% 40%, transparent 40%, rgba(3,6,12,0.55) 100%)",
+            "radial-gradient(ellipse 120% 80% at 50% 40%, transparent 40%, rgba(1,3,10,0.55) 100%)",
         }}
       />
     </div>

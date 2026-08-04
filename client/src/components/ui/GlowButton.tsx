@@ -53,13 +53,13 @@ export default function GlowButton({
     overflow: "hidden",
     width: full ? "100%" : undefined,
     cursor: disabled ? "not-allowed" : "pointer",
-    border: primary ? "none" : "1px solid rgba(255,255,255,0.1)",
+    border: primary ? "none" : "1px solid rgba(96,165,250,0.17)",
     background: disabled
-      ? "rgba(255,255,255,0.045)"
+      ? "rgba(96,165,250,0.07)"
       : primary
-      ? "linear-gradient(135deg, #2563EB 0%, #7C3AED 100%)"
-      : "rgba(255,255,255,0.03)",
-    color: disabled ? "#334155" : primary ? "#fff" : "#94A3B8",
+      ? "linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%)"
+      : "rgba(96,165,250,0.05)",
+    color: disabled ? "#2E4560" : primary ? "#fff" : "#8FA8C8",
     backdropFilter: primary ? undefined : "blur(10px)",
     boxShadow:
       disabled || !primary
@@ -100,10 +100,10 @@ export default function GlowButton({
       if (s) s.style.transform = "translateX(120%)";
       if (primary && !disabled) {
         e.currentTarget.style.boxShadow =
-          "0 0 56px rgba(37,99,235,0.55), 0 0 110px rgba(124,58,237,0.24), 0 10px 34px rgba(0,0,0,0.45)";
+          "0 0 56px rgba(37,99,235,0.55), 0 0 110px rgba(14,165,233,0.24), 0 10px 34px rgba(0,0,0,0.45)";
       } else if (!primary) {
         e.currentTarget.style.borderColor = "rgba(96,165,250,0.4)";
-        e.currentTarget.style.color = "#E2E8F0";
+        e.currentTarget.style.color = "#D7E5FB";
       }
     },
     onMouseLeave: (e: React.MouseEvent<HTMLElement>) => {
@@ -113,8 +113,8 @@ export default function GlowButton({
         e.currentTarget.style.boxShadow =
           "0 0 34px rgba(37,99,235,0.34), 0 6px 26px rgba(0,0,0,0.42)";
       } else if (!primary) {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-        e.currentTarget.style.color = "#94A3B8";
+        e.currentTarget.style.borderColor = "rgba(96,165,250,0.17)";
+        e.currentTarget.style.color = "#8FA8C8";
       }
     },
   };

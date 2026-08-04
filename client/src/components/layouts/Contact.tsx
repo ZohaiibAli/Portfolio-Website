@@ -12,7 +12,7 @@ import { EASE_BACK, EASE_OUT, VIEWPORT, alpha } from "@/lib/motion";
 const LINKS = [
   { label: "GitHub", handle: "githubzohaib", icon: "⬡", color: "#60A5FA", href: "https://github.com/githubzohaib" },
   { label: "LinkedIn", handle: "Zohaib Ali", icon: "◈", color: "#22D3EE", href: "https://www.linkedin.com/in/zohaib-ali-5251b328b/" },
-  { label: "Email", handle: "zohaibaliwork@gmail.com", icon: "◉", color: "#7C3AED", href: "mailto:zohaibaliwork@gmail.com" },
+  { label: "Email", handle: "zohaibaliwork@gmail.com", icon: "◉", color: "#0EA5E9", href: "mailto:zohaibaliwork@gmail.com" },
 ];
 
 const ROLES = ["Full Stack Developer", "Frontend Developer", "Backend Developer", "Distributed Systems", "Platform Eng."];
@@ -41,8 +41,8 @@ function ContactLink({ item, index }: { item: (typeof LINKS)[number]; index: num
       style={{
         padding: "14px 18px",
         textDecoration: "none",
-        background: hovered ? "rgba(255,255,255,0.045)" : "rgba(255,255,255,0.02)",
-        border: `1px solid ${hovered ? alpha(item.color, 0.32) : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? "rgba(96,165,250,0.07)" : "rgba(255,255,255,0.02)",
+        border: `1px solid ${hovered ? alpha(item.color, 0.32) : "rgba(96,165,250,0.11)"}`,
         backdropFilter: "blur(12px)",
         boxShadow: hovered ? `0 0 24px ${alpha(item.color, 0.14)}` : "none",
         transition: "background 260ms ease, border-color 260ms ease, box-shadow 260ms ease",
@@ -68,13 +68,13 @@ function ContactLink({ item, index }: { item: (typeof LINKS)[number]; index: num
       <span className="min-w-0">
         <span
           className="mono block"
-          style={{ fontSize: 10, color: "#334155", letterSpacing: "0.12em", textTransform: "uppercase" }}
+          style={{ fontSize: 10, color: "#2E4560", letterSpacing: "0.12em", textTransform: "uppercase" }}
         >
           {item.label}
         </span>
         <span
           className="block truncate"
-          style={{ fontSize: 13, color: hovered ? "#F1F5F9" : "#64748B", transition: "color 260ms ease" }}
+          style={{ fontSize: 13, color: hovered ? "#E9F1FF" : "#607E9E", transition: "color 260ms ease" }}
         >
           {item.handle}
         </span>
@@ -112,7 +112,7 @@ function Field({ label, value, onChange, type = "text", placeholder, multiline, 
 
   const shared: React.CSSProperties = {
     width: "100%",
-    background: focused ? "rgba(255,255,255,0.045)" : "rgba(255,255,255,0.02)",
+    background: focused ? "rgba(96,165,250,0.07)" : "rgba(255,255,255,0.02)",
     border: `1px solid ${
       invalid
         ? "rgba(248,113,113,0.55)"
@@ -124,7 +124,7 @@ function Field({ label, value, onChange, type = "text", placeholder, multiline, 
     }`,
     borderRadius: 13,
     padding: multiline ? "42px 18px 16px" : "27px 18px 11px",
-    color: "#F1F5F9",
+    color: "#E9F1FF",
     fontFamily: "var(--font-body)",
     fontSize: 14,
     lineHeight: 1.6,
@@ -150,7 +150,7 @@ function Field({ label, value, onChange, type = "text", placeholder, multiline, 
         animate={{
           y: lifted ? 0 : 10,
           fontSize: lifted ? 9.5 : 13,
-          color: invalid ? "#F87171" : focused ? "#60A5FA" : filled ? "#64748B" : "#334155",
+          color: invalid ? "#F87171" : focused ? "#60A5FA" : filled ? "#607E9E" : "#2E4560",
         }}
         transition={{ duration: 0.22, ease: EASE_OUT }}
       >
@@ -241,22 +241,22 @@ function SuccessState() {
             fontFamily: "var(--font-display)",
             fontSize: 20,
             fontWeight: 700,
-            color: "#F1F5F9",
+            color: "#E9F1FF",
             letterSpacing: "-0.03em",
             marginBottom: 8,
           }}
         >
           Message sent!
         </p>
-        <p style={{ fontSize: 14, color: "#64748B", lineHeight: 1.7, maxWidth: 290 }}>
+        <p style={{ fontSize: 14, color: "#607E9E", lineHeight: 1.7, maxWidth: 290 }}>
           Thanks for reaching out — I'll get back to you within{" "}
-          <span style={{ color: "#94A3B8" }}>24 hours</span>.
+          <span style={{ color: "#8FA8C8" }}>24 hours</span>.
         </p>
       </motion.div>
 
       <motion.span
         className="mono flex items-center gap-2"
-        style={{ fontSize: 11, color: "#334155", letterSpacing: "0.08em" }}
+        style={{ fontSize: 11, color: "#2E4560", letterSpacing: "0.08em" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7 }}
@@ -310,7 +310,7 @@ export default function Contact() {
     <Section id="contact" label="Contact">
       <SectionHeading eyebrow="get in touch" title="Let's Build Something" accent="Meaningful">
         Whether it's a new role, an open-source collaboration, or a hard engineering problem — I'm
-        always up for a <span style={{ color: "#94A3B8" }}>good conversation</span>.
+        always up for a <span style={{ color: "#8FA8C8" }}>good conversation</span>.
       </SectionHeading>
 
       <div className="flex flex-col items-start gap-12 lg:flex-row lg:gap-16">
@@ -319,7 +319,7 @@ export default function Contact() {
           <Reveal>
             <div
               className="mono mb-5 flex items-center gap-3"
-              style={{ fontSize: 11, color: "#334155", letterSpacing: "0.14em", textTransform: "uppercase" }}
+              style={{ fontSize: 11, color: "#2E4560", letterSpacing: "0.14em", textTransform: "uppercase" }}
             >
               <span>Connect</span>
               <span style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(96,165,250,0.22), transparent)" }} />
@@ -343,8 +343,8 @@ export default function Contact() {
                   Available for new roles
                 </span>
               </div>
-              <p style={{ fontSize: 13, color: "#64748B", lineHeight: 1.78, marginBottom: 14 }}>
-                Open to <span style={{ color: "#94A3B8" }}>Full Stack Developer</span> roles focused
+              <p style={{ fontSize: 13, color: "#607E9E", lineHeight: 1.78, marginBottom: 14 }}>
+                Open to <span style={{ color: "#8FA8C8" }}>Full Stack Developer</span> roles focused
                 on distributed systems, platform engineering or developer tooling.
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -363,7 +363,7 @@ export default function Contact() {
               className="overflow-hidden"
               style={{
                 borderRadius: 22,
-                background: "rgba(10,14,22,0.92)",
+                background: "rgba(6,11,24,0.92)",
                 border: "1px solid rgba(96,165,250,0.13)",
                 backdropFilter: "blur(24px)",
                 boxShadow: "0 40px 90px rgba(0,0,0,0.6), 0 0 80px rgba(37,99,235,0.08)",
@@ -371,12 +371,12 @@ export default function Contact() {
             >
               <div
                 className="flex items-center gap-2 px-4 py-3"
-                style={{ background: "#151A22", borderBottom: "1px solid #1E242E" }}
+                style={{ background: "#0B1224", borderBottom: "1px solid #151E36" }}
               >
                 {["#FF5F57", "#FFBD2E", "#28C840"].map((c) => (
                   <span key={c} className="h-2.5 w-2.5 rounded-full" style={{ background: c }} />
                 ))}
-                <span className="mono ml-2" style={{ fontSize: 11, color: "#4B5563", letterSpacing: "0.05em" }}>
+                <span className="mono ml-2" style={{ fontSize: 11, color: "#465A73", letterSpacing: "0.05em" }}>
                   message.send
                 </span>
                 <span
@@ -471,9 +471,9 @@ export default function Contact() {
 
                     <span
                       className="mono flex items-center justify-center gap-2"
-                      style={{ fontSize: 10.5, color: "#334155", letterSpacing: "0.06em" }}
+                      style={{ fontSize: 10.5, color: "#2E4560", letterSpacing: "0.06em" }}
                     >
-                      <span style={{ color: "#1E3A5F" }}>⚡</span>
+                      <span style={{ color: "#1B3B6B" }}>⚡</span>
                       Typically responds within 24 hours
                     </span>
                   </motion.form>

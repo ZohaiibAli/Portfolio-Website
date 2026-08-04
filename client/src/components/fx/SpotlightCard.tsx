@@ -101,17 +101,17 @@ export default function SpotlightCard({
         borderRadius: radius,
         background: high
           ? hovered
-            ? "rgba(255,255,255,0.045)"
-            : "rgba(255,255,255,0.022)"
+            ? "rgba(96,165,250,0.07)"
+            : "rgba(96,165,250,0.04)"
           : hovered
-          ? "rgba(19,25,36,0.92)"
-          : "rgba(15,20,30,0.88)",
-        border: "1px solid rgba(255,255,255,0.07)",
+          ? "rgba(12,20,40,0.92)"
+          : "rgba(9,15,32,0.88)",
+        border: "1px solid rgba(96,165,250,0.13)",
         backdropFilter: glass,
         WebkitBackdropFilter: glass,
         boxShadow: hovered
-          ? `0 0 38px ${alpha(accent, 0.16)}, 0 22px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)`
-          : "0 6px 28px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.035)",
+          ? `0 0 38px ${alpha(accent, 0.16)}, 0 22px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(96,165,250,0.11)`
+          : "0 6px 28px rgba(0,0,0,0.34), inset 0 1px 0 rgba(96,165,250,0.055)",
         transition: "background 320ms ease, box-shadow 320ms ease",
         overflow: "hidden",
         isolation: "isolate",

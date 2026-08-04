@@ -97,7 +97,7 @@ export default function SectionHeading({
           fontFamily: "var(--font-display)",
           fontSize: "clamp(2rem, 5.2vw, 3.4rem)",
           fontWeight: 700,
-          color: "#F1F5F9",
+          color: "#E9F1FF",
           letterSpacing: "-0.045em",
           lineHeight: 1.08,
           margin: "24px 0 18px",
@@ -114,7 +114,7 @@ export default function SectionHeading({
             style={{
               fontFamily: "var(--font-body)",
               fontSize: "clamp(0.92rem, 2vw, 1.05rem)",
-              color: "#64748B",
+              color: "#607E9E",
               lineHeight: 1.8,
               maxWidth: 540,
             }}

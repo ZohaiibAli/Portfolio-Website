@@ -26,7 +26,7 @@ function Body({ divider, children }: { divider: boolean; children: ReactNode }) 
           className="absolute top-0 left-0 right-0 h-px"
           style={{
             background:
-              "linear-gradient(90deg, transparent 0%, #1E3A5F 28%, rgba(37,99,235,0.55) 50%, #1E3A5F 72%, transparent 100%)",
+              "linear-gradient(90deg, transparent 0%, #1B3B6B 28%, rgba(37,99,235,0.55) 50%, #1B3B6B 72%, transparent 100%)",
           }}
         />
       )}

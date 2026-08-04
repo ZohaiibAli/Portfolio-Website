@@ -55,11 +55,11 @@ function ContactLine({ icon, value, href }: { icon: React.ReactNode; value: stri
         fontSize: 12,
         letterSpacing: "0.02em",
         textDecoration: "none",
-        color: hov ? "#CBD5E1" : "#94A3B8",
+        color: hov ? "#BFD3EF" : "#8FA8C8",
         transition: "color 200ms ease",
       }}
     >
-      <span style={{ color: hov ? "#60A5FA" : "#64748B", transition: "color 200ms ease", lineHeight: 0 }}>
+      <span style={{ color: hov ? "#60A5FA" : "#607E9E", transition: "color 200ms ease", lineHeight: 0 }}>
         {icon}
       </span>
       {value}
@@ -97,9 +97,9 @@ function SocialButton({
           width: 38,
           height: 38,
           textDecoration: "none",
-          color: hov ? hoverColor : "#64748B",
-          background: hov ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.03)",
-          border: `1px solid ${hov ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)"}`,
+          color: hov ? hoverColor : "#607E9E",
+          background: hov ? "rgba(96,165,250,0.13)" : "rgba(96,165,250,0.05)",
+          border: `1px solid ${hov ? "rgba(255,255,255,0.2)" : "rgba(96,165,250,0.17)"}`,
           boxShadow: hov ? `0 0 20px ${hoverColor}33` : "none",
           transition: "color 200ms ease, background 200ms ease, border-color 200ms ease, box-shadow 200ms ease",
         }}
@@ -122,7 +122,7 @@ export default function Footer() {
         style={{
           height: 1,
           background:
-            "linear-gradient(90deg, transparent, rgba(37,99,235,0.38) 30%, rgba(124,58,237,0.38) 70%, transparent)",
+            "linear-gradient(90deg, transparent, rgba(37,99,235,0.38) 30%, rgba(14,165,233,0.38) 70%, transparent)",
         }}
       />
 
@@ -150,14 +150,14 @@ export default function Footer() {
           >
             Zohaib Ali
           </span>
-          <span className="mono" style={{ fontSize: 10, color: "#64748B", letterSpacing: "0.04em" }}>
+          <span className="mono" style={{ fontSize: 10, color: "#607E9E", letterSpacing: "0.04em" }}>
             <span style={{ color: "#3B82F6" }}>©</span> {year} · All rights reserved
           </span>
         </div>
 
         <div className="flex flex-wrap items-center gap-5">
           <ContactLine icon={<IconMail />} value="zohaibaliwork@gmail.com" href="mailto:zohaibaliwork@gmail.com" />
-          <span aria-hidden="true" style={{ width: 1, height: 14, background: "rgba(255,255,255,0.1)" }} />
+          <span aria-hidden="true" style={{ width: 1, height: 14, background: "rgba(96,165,250,0.17)" }} />
           <ContactLine icon={<IconPhone />} value="+92 336 2082383" href="tel:+923362082383" />
         </div>
 
@@ -172,7 +172,7 @@ export default function Footer() {
             icon={<IconGithub />}
             label="GitHub"
             href="https://github.com/githubzohaib"
-            hoverColor="#E2E8F0"
+            hoverColor="#D7E5FB"
           />
         </div>
       </motion.div>

@@ -169,13 +169,13 @@ function BrowserFrame({
   return (
     <div
       className="relative w-full overflow-hidden"
-      style={{ height, background: "#0B0F16", flexShrink: 0 }}
+      style={{ height, background: "#050A16", flexShrink: 0 }}
     >
       {/* Traffic lights + address bar — the same language as the hero's code
           editor, so the two read as one system. */}
       <div
         className="flex items-center gap-1.5 px-3"
-        style={{ height: CHROME, background: "#151A22", borderBottom: "1px solid #1E242E" }}
+        style={{ height: CHROME, background: "#0B1224", borderBottom: "1px solid #151E36" }}
       >
         {["#FF5F57", "#FFBD2E", "#28C840"].map((c) => (
           <span
@@ -188,8 +188,8 @@ function BrowserFrame({
           style={{
             padding: "1px 8px",
             fontSize: 8.5,
-            color: "#5B6B80",
-            background: "rgba(255,255,255,0.04)",
+            color: "#5A7492",
+            background: "rgba(96,165,250,0.06)",
             letterSpacing: "0.02em",
             minWidth: 0,
           }}
@@ -215,7 +215,7 @@ function BrowserFrame({
           className="pointer-events-none absolute inset-x-0 bottom-0"
           style={{
             height: 40,
-            background: "linear-gradient(to top, rgba(6,10,18,0.85), transparent)",
+            background: "linear-gradient(to top, rgba(3,6,15,0.85), transparent)",
           }}
         />
       </div>
@@ -366,8 +366,8 @@ function ProjectCard({
         className="flex h-full w-full flex-col overflow-hidden text-left"
         style={{
           borderRadius: 20,
-          background: "rgba(10,14,20,0.86)",
-          border: `1px solid ${hovered ? alpha(project.accent, 0.4) : "rgba(255,255,255,0.07)"}`,
+          background: "rgba(6,11,24,0.86)",
+          border: `1px solid ${hovered ? alpha(project.accent, 0.4) : "rgba(96,165,250,0.13)"}`,
           backdropFilter: "blur(20px)",
           boxShadow: hovered
             ? `0 0 44px ${alpha(project.accent, 0.2)}, 0 24px 64px rgba(0,0,0,0.6)`
@@ -389,7 +389,7 @@ function ProjectCard({
               fontSize: 16,
               fontWeight: 700,
               letterSpacing: "-0.03em",
-              color: hovered ? project.accent : "#F1F5F9",
+              color: hovered ? project.accent : "#E9F1FF",
               transition: "color 260ms ease",
             }}
           >
@@ -414,7 +414,7 @@ function ProjectCard({
               margin: "12px 0 14px",
               flex: 1,
               fontSize: 12.5,
-              color: "#4E6080",
+              color: "#4F6C90",
               lineHeight: 1.75,
             }}
           >
@@ -493,7 +493,7 @@ function ProjectModal({
       <motion.div
         className="absolute inset-0"
         style={{
-          background: "rgba(3,6,12,0.82)",
+          background: "rgba(1,3,10,0.82)",
           backdropFilter: "blur(14px)",
         }}
         initial={{ opacity: 0 }}
@@ -513,7 +513,7 @@ function ProjectModal({
         style={{
           maxWidth: 660,
           borderRadius: 22,
-          background: "rgba(10,14,20,0.96)",
+          background: "rgba(6,11,24,0.96)",
           border: `1px solid ${alpha(project.accent, 0.3)}`,
           boxShadow: `0 0 70px ${alpha(project.accent, 0.18)}, 0 40px 100px rgba(0,0,0,0.75)`,
         }}
@@ -527,9 +527,9 @@ function ProjectModal({
           aria-label="Close"
           className="mono absolute right-3.5 top-3.5 grid h-8 w-8 place-items-center rounded-lg"
           style={{
-            background: "rgba(6,10,18,0.72)",
-            border: "1px solid rgba(255,255,255,0.14)",
-            color: "#94A3B8",
+            background: "rgba(3,6,15,0.72)",
+            border: "1px solid rgba(96,165,250,0.22)",
+            color: "#8FA8C8",
             fontSize: 15,
             cursor: "pointer",
             backdropFilter: "blur(10px)",
@@ -546,7 +546,7 @@ function ProjectModal({
               fontSize: "clamp(1.4rem, 4vw, 1.9rem)",
               fontWeight: 700,
               letterSpacing: "-0.04em",
-              color: "#F1F5F9",
+              color: "#E9F1FF",
             }}
           >
             {project.name}
@@ -574,7 +574,7 @@ function ProjectModal({
               style={{
                 margin: "18px 0 22px",
                 fontSize: 14,
-                color: "#64748B",
+                color: "#607E9E",
                 lineHeight: 1.85,
               }}
             >
@@ -585,7 +585,7 @@ function ProjectModal({
               className="mono mb-4 flex items-center gap-3"
               style={{
                 fontSize: 10.5,
-                color: "#334155",
+                color: "#2E4560",
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
               }}
@@ -625,7 +625,7 @@ function ProjectModal({
                     ▸
                   </span>
                   <span
-                    style={{ fontSize: 13, color: "#5C7089", lineHeight: 1.75 }}
+                    style={{ fontSize: 13, color: "#5E7A9C", lineHeight: 1.75 }}
                   >
                     {f}
                   </span>
@@ -657,9 +657,9 @@ function ProjectModal({
                     padding: "15px 30px",
                     borderRadius: 14,
                     fontSize: 13,
-                    color: "#334155",
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.07)",
+                    color: "#2E4560",
+                    background: "rgba(96,165,250,0.05)",
+                    border: "1px solid rgba(96,165,250,0.13)",
                   }}
                 >
                   Private / In progress
@@ -692,7 +692,7 @@ export default function Projects() {
             visitor reads the gap as the number being inflated. Both figures
             are derived, so adding a case study updates the sentence itself. */}
         {PROJECTS.length} of {PROJECTS_SHIPPED} shipped builds — real-world systems made for{" "}
-        <span style={{ color: "#94A3B8" }}>
+        <span style={{ color: "#8FA8C8" }}>
           scale, reliability, and real users
         </span>
         , from geospatial marketplaces to RAG-powered assistants.

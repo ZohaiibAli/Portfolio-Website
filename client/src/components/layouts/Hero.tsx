@@ -122,37 +122,37 @@ function TypedRole() {
 type Token = { t: string; c: string };
 
 const CODE: Token[][] = [
-  [{ t: "const ", c: "#C792EA" }, { t: "developer", c: "#82AAFF" }, { t: " = {", c: "#E2E8F0" }],
+  [{ t: "const ", c: "#7DD3FC" }, { t: "developer", c: "#60A5FA" }, { t: " = {", c: "#D7E5FB" }],
   [
-    { t: "  stack", c: "#7FDBCA" },
-    { t: ": [", c: "#E2E8F0" },
-    { t: '"TypeScript"', c: "#ECC48D" },
-    { t: ", ", c: "#E2E8F0" },
-    { t: '"Python"', c: "#ECC48D" },
-    { t: "],", c: "#E2E8F0" },
+    { t: "  stack", c: "#93C5FD" },
+    { t: ": [", c: "#D7E5FB" },
+    { t: '"TypeScript"', c: "#5EEAD4" },
+    { t: ", ", c: "#D7E5FB" },
+    { t: '"Python"', c: "#5EEAD4" },
+    { t: "],", c: "#D7E5FB" },
   ],
   [
-    { t: "  builds", c: "#7FDBCA" },
-    { t: ": ", c: "#E2E8F0" },
-    { t: '"full-stack marketplaces"', c: "#ECC48D" },
-    { t: ",", c: "#E2E8F0" },
+    { t: "  builds", c: "#93C5FD" },
+    { t: ": ", c: "#D7E5FB" },
+    { t: '"full-stack marketplaces"', c: "#5EEAD4" },
+    { t: ",", c: "#D7E5FB" },
   ],
   [
-    { t: "  focus", c: "#7FDBCA" },
-    { t: ": ", c: "#E2E8F0" },
-    { t: '"RAG + ML integration"', c: "#ECC48D" },
-    { t: ",", c: "#E2E8F0" },
+    { t: "  focus", c: "#93C5FD" },
+    { t: ": ", c: "#D7E5FB" },
+    { t: '"RAG + ML integration"', c: "#5EEAD4" },
+    { t: ",", c: "#D7E5FB" },
   ],
-  [{ t: "  deploy", c: "#F78C6C" }, { t: ": ", c: "#E2E8F0" }, { t: "async", c: "#C792EA" }, { t: " () => {", c: "#E2E8F0" }],
+  [{ t: "  deploy", c: "#38BDF8" }, { t: ": ", c: "#D7E5FB" }, { t: "async", c: "#7DD3FC" }, { t: " () => {", c: "#D7E5FB" }],
   [
-    { t: "    await ", c: "#C792EA" },
-    { t: "ship", c: "#82AAFF" },
-    { t: "(", c: "#E2E8F0" },
-    { t: "production", c: "#ECC48D" },
-    { t: ");", c: "#E2E8F0" },
+    { t: "    await ", c: "#7DD3FC" },
+    { t: "ship", c: "#60A5FA" },
+    { t: "(", c: "#D7E5FB" },
+    { t: "production", c: "#5EEAD4" },
+    { t: ");", c: "#D7E5FB" },
   ],
-  [{ t: "  },", c: "#E2E8F0" }],
-  [{ t: "};", c: "#E2E8F0" }],
+  [{ t: "  },", c: "#D7E5FB" }],
+  [{ t: "};", c: "#D7E5FB" }],
 ];
 
 function CodeEditor() {
@@ -174,8 +174,8 @@ function CodeEditor() {
       className="relative w-full overflow-hidden"
       style={{
         borderRadius: 16,
-        background: "linear-gradient(160deg, #0D1117 0%, #12161F 100%)",
-        border: "1px solid #232A35",
+        background: "linear-gradient(160deg, #070D1C 0%, #0A1124 100%)",
+        border: "1px solid #1A2540",
         boxShadow:
           "0 0 0 1px rgba(96,165,250,0.06), 0 40px 80px -20px rgba(0,0,0,0.85), 0 0 90px rgba(37,99,235,0.1)",
         fontFamily: "var(--font-mono)",
@@ -184,12 +184,12 @@ function CodeEditor() {
       {/* Title bar */}
       <div
         className="flex items-center gap-2 px-4 py-3"
-        style={{ borderBottom: "1px solid #1E242E", background: "#151A22" }}
+        style={{ borderBottom: "1px solid #151E36", background: "#0B1224" }}
       >
         {["#FF5F57", "#FFBD2E", "#28C840"].map((c) => (
           <span key={c} className="h-3 w-3 rounded-full" style={{ background: c }} />
         ))}
-        <span className="ml-3" style={{ fontSize: 11, color: "#6B7280", letterSpacing: "0.05em" }}>
+        <span className="ml-3" style={{ fontSize: 11, color: "#67809A", letterSpacing: "0.05em" }}>
           developer.ts
         </span>
         <span className="ml-auto flex items-center gap-1.5">
@@ -210,7 +210,7 @@ function CodeEditor() {
           >
             <span
               className="mr-5 w-4 select-none text-right"
-              style={{ fontSize: 11, color: "#3B4757" }}
+              style={{ fontSize: 11, color: "#374F6B" }}
             >
               {i + 1}
             </span>
@@ -231,7 +231,7 @@ function CodeEditor() {
       {/* Status bar */}
       <div
         className="flex items-center justify-between px-4 py-2"
-        style={{ background: "#1A202A", borderTop: "1px solid #1E242E", fontSize: 11, color: "#6B7280" }}
+        style={{ background: "#0D1528", borderTop: "1px solid #151E36", fontSize: 11, color: "#67809A" }}
       >
         <span>TypeScript 5.4</span>
         <span style={{ color: "#34D399" }}>✓ No errors</span>
@@ -277,7 +277,7 @@ function Metric({ label, value, sub, color, delay, x, y, depth, px, py }: Metric
         minWidth: 132,
         padding: "12px 16px",
         borderRadius: 14,
-        background: "rgba(10,14,22,0.82)",
+        background: "rgba(6,11,24,0.82)",
         border: `1px solid ${color}33`,
         backdropFilter: "blur(18px)",
         boxShadow: `0 0 26px ${color}22, 0 12px 40px rgba(0,0,0,0.5)`,
@@ -292,7 +292,7 @@ function Metric({ label, value, sub, color, delay, x, y, depth, px, py }: Metric
       >
         <div
           className="mono"
-          style={{ fontSize: 9.5, color: "#5B6B80", letterSpacing: "0.12em", textTransform: "uppercase" }}
+          style={{ fontSize: 9.5, color: "#5A7492", letterSpacing: "0.12em", textTransform: "uppercase" }}
         >
           {label}
         </div>
@@ -302,7 +302,7 @@ function Metric({ label, value, sub, color, delay, x, y, depth, px, py }: Metric
         >
           {value}
         </div>
-        <div style={{ fontSize: 10.5, color: "#3E4C5E", marginTop: 2 }}>{sub}</div>
+        <div style={{ fontSize: 10.5, color: "#3B5470", marginTop: 2 }}>{sub}</div>
       </motion.div>
     </motion.div>
   );
@@ -399,7 +399,7 @@ export default function Hero() {
               fontSize: "clamp(2.7rem, 10vw, 5rem)",
               lineHeight: 0.98,
               letterSpacing: "-0.05em",
-              color: "#F1F5F9",
+              color: "#E9F1FF",
               margin: "26px 0 14px",
             }}
           >
@@ -416,12 +416,12 @@ export default function Hero() {
             style={{
               margin: "24px 0 38px",
               maxWidth: 520,
-              color: "#64748B",
+              color: "#607E9E",
               lineHeight: 1.85,
               fontSize: "clamp(0.92rem, 2.4vw, 1.08rem)",
             }}
           >
-            I build <span style={{ color: "#94A3B8" }}>scalable full-stack web applications</span> and
+            I build <span style={{ color: "#8FA8C8" }}>scalable full-stack web applications</span> and
             ship AI-powered features — RAG chatbots, ML recommendations and real-time systems — with
             clean architecture and a strong focus on user-centric design.
           </motion.p>
@@ -490,16 +490,16 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.3, duration: 0.7, ease: EASE_OUT }}
             style={{
-              background: "rgba(10,14,22,0.7)",
-              border: "1px solid #1E242E",
+              background: "rgba(6,11,24,0.7)",
+              border: "1px solid #151E36",
               backdropFilter: "blur(10px)",
               fontFamily: "var(--font-mono)",
               fontSize: 12.5,
             }}
           >
             <span style={{ color: "#34D399" }}>❯</span>
-            <span style={{ color: "#64748B" }}>
-              git log --oneline <span style={{ color: "#94A3B8" }}>|</span>{" "}
+            <span style={{ color: "#607E9E" }}>
+              git log --oneline <span style={{ color: "#8FA8C8" }}>|</span>{" "}
               <span style={{ color: "#60A5FA" }}>wc -l</span>
             </span>
             <span className="ml-auto" style={{ color: "#34D399" }}>
@@ -520,7 +520,7 @@ export default function Hero() {
               inset: -50,
               zIndex: -1,
               background:
-                "radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.17) 0%, rgba(124,58,237,0.09) 42%, transparent 74%)",
+                "radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.17) 0%, rgba(14,165,233,0.09) 42%, transparent 74%)",
             }}
           />
         </motion.div>
@@ -535,7 +535,7 @@ export default function Hero() {
           document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
         }}
         className="absolute bottom-7 left-1/2 flex flex-col items-center gap-2"
-        style={{ translateX: "-50%", textDecoration: "none", color: "#334155" }}
+        style={{ translateX: "-50%", textDecoration: "none", color: "#2E4560" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 0.8 }}

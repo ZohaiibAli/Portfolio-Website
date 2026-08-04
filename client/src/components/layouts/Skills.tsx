@@ -23,12 +23,12 @@ const SKILLS: Skill[] = [
   { name: "React.js", description: "Declarative UI architecture with hooks, context & concurrent mode", icon: "Re", color: "#22D3EE", level: 93 },
   { name: "Tailwind CSS", description: "Utility-first styling for fast, consistent, responsive UI", icon: "Tw", color: "#38BDF8", level: 90 },
   { name: "Node.js", description: "Event-driven server runtime powering high-throughput APIs", icon: "No", color: "#34D399", level: 87 },
-  { name: "Express.js", description: "Minimal, unopinionated framework for RESTful Node.js APIs", icon: "Ex", color: "#818CF8", level: 88 },
+  { name: "Express.js", description: "Minimal, unopinionated framework for RESTful Node.js APIs", icon: "Ex", color: "#7DD3FC", level: 88 },
   { name: "FastAPI", description: "High-performance Python APIs with async support & auto docs", icon: "Fa", color: "#10B981", level: 78 },
   { name: "MongoDB", description: "Document database with horizontal scaling and flexible schema", icon: "MG", color: "#4ADE80", level: 85 },
-  { name: "PostgreSQL", description: "Relational database with strong consistency & geospatial support", icon: "Pg", color: "#A78BFA", level: 80 },
-  { name: "Machine Learning", description: "Model training & inference with scikit-learn for real-world data", icon: "ML", color: "#F472B6", level: 72 },
-  { name: "RAG Pipelines", description: "Retrieval-augmented generation with embeddings & semantic search", icon: "RAG", color: "#C084FC", level: 76 },
+  { name: "PostgreSQL", description: "Relational database with strong consistency & geospatial support", icon: "Pg", color: "#7DD3FC", level: 80 },
+  { name: "Machine Learning", description: "Model training & inference with scikit-learn for real-world data", icon: "ML", color: "#5EEAD4", level: 72 },
+  { name: "RAG Pipelines", description: "Retrieval-augmented generation with embeddings & semantic search", icon: "RAG", color: "#93C5FD", level: 76 },
 ];
 
 const EXTRAS = ["RESTful APIs", "WebSockets", "Git & GitHub", "Agile Development", "H3 Geospatial", "JWT Auth"];
@@ -73,7 +73,7 @@ function SkillCard({ skill, index }: { skill: Skill; index: number }) {
                   fontFamily: "var(--font-display)",
                   fontSize: 15,
                   fontWeight: 600,
-                  color: "#F1F5F9",
+                  color: "#E9F1FF",
                   letterSpacing: "-0.02em",
                 }}
               >
@@ -84,14 +84,14 @@ function SkillCard({ skill, index }: { skill: Skill; index: number }) {
               </span>
             </div>
 
-            <p style={{ marginTop: 6, fontSize: 12.5, color: "#64748B", lineHeight: 1.65 }}>
+            <p style={{ marginTop: 6, fontSize: 12.5, color: "#607E9E", lineHeight: 1.65 }}>
               {skill.description}
             </p>
 
             {/* Proficiency meter — fills once the card is in view. */}
             <div
               className="mt-3.5 overflow-hidden"
-              style={{ height: 3, borderRadius: 999, background: "rgba(255,255,255,0.06)" }}
+              style={{ height: 3, borderRadius: 999, background: "rgba(96,165,250,0.11)" }}
             >
               <motion.div
                 style={{
@@ -118,7 +118,7 @@ export default function Skills() {
     <Section id="skills" label="Technical Skills">
       <SectionHeading eyebrow="what I work with" title="Technical" accent="Expertise">
         A curated toolkit honed across production systems — from browser to bare metal, each chosen
-        for <span style={{ color: "#94A3B8" }}>performance, reliability, and developer experience</span>.
+        for <span style={{ color: "#8FA8C8" }}>performance, reliability, and developer experience</span>.
       </SectionHeading>
 
       <div

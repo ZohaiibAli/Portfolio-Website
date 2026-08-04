@@ -3,24 +3,50 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+    ── Theme: Abyss ──────────────────────────────────────────────────────
+    One hue family, top to bottom. Surfaces are a near-black that is
+    measurably blue rather than neutral grey, and every accent is a rung on
+    a single blue→cyan ladder — there is no second hue competing with it.
+
+    The neutrals are deliberately not Tailwind's slate. Slate is a warm-ish
+    grey, and against a blue-black ground it reads muddy; these are the same
+    lightness steps rotated onto the page's own hue, so body copy sits in the
+    palette instead of on top of it.
+  */
   :root {
     /* ── Surfaces ─────────────────────────────────────────────── */
-    --bg: #060a12;
-    --bg-elevated: rgba(13, 17, 23, 0.85);
-    --hairline: rgba(255, 255, 255, 0.07);
+    --bg: #03060f;
+    --bg-deep: #01030a;
+    --bg-elevated: rgba(8, 14, 28, 0.86);
+    --panel: #070c1a;
+
+    /* Hairlines carry a trace of the accent rather than plain white. At 13%
+       it never reads as a coloured border — it reads as an edge catching the
+       light the rest of the page is lit by. */
+    --hairline: rgba(96, 165, 250, 0.13);
+    --hairline-strong: rgba(96, 165, 250, 0.24);
 
     /* ── Text ─────────────────────────────────────────────────── */
-    --text: #f1f5f9;
-    --text-dim: #94a3b8;
-    --text-muted: #64748b;
-    --text-faint: #334155;
+    --text: #e9f1ff;
+    --text-dim: #8fa8c8;
+    --text-muted: #607e9e;
+    --text-faint: #2e4560;
 
-    /* ── Accents ──────────────────────────────────────────────── */
-    --blue: #60a5fa;
+    /* ── Accents — the ladder ─────────────────────────────────── */
+    --royal: #1d4ed8;
     --blue-deep: #2563eb;
+    --blue: #3b82f6;
+    --blue-soft: #60a5fa;
+    --sky: #38bdf8;
+    --sky-soft: #7dd3fc;
     --cyan: #22d3ee;
+    --ice: #a5f3fc;
+
+    /* Kept out of the ladder on purpose: the two colours that are allowed to
+       mean something rather than decorate. Green is "live", amber is the
+       single warm note that stops the page reading as monochrome. */
     --green: #34d399;
-    --violet: #7c3aed;
     --amber: #f59e0b;
 
     /* ── Type ─────────────────────────────────────────────────── */
@@ -54,8 +80,19 @@
   }
 
   ::selection {
-    background: rgba(37, 99, 235, 0.32);
-    color: #fff;
+    background: rgba(56, 189, 248, 0.3);
+    color: #eaf4ff;
+  }
+
+  /*
+    Keyboard focus is the one affordance the custom cursor cannot express, so
+    it gets the accent outright. `:focus-visible` rather than `:focus` keeps it
+    off mouse clicks, where a ring on every tapped button would read as a bug.
+  */
+  :focus-visible {
+    outline: 2px solid var(--sky);
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 
   /* Slim, on-brand scrollbar */
@@ -64,22 +101,33 @@
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #05080e;
+    background: var(--bg-deep);
   }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #1e3a5f, #2563eb55);
+    background: linear-gradient(180deg, #1b3b6b, rgba(37, 99, 235, 0.45));
     border-radius: 999px;
-    border: 2px solid #05080e;
+    border: 2px solid var(--bg-deep);
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #2563eb, #7c3aed);
+    background: linear-gradient(180deg, #38bdf8, #22d3ee);
+  }
+
+  /* Firefox has no pseudo-elements for this, only the two-value shorthand. */
+  html {
+    scrollbar-color: rgba(56, 189, 248, 0.45) var(--bg-deep);
+    scrollbar-width: thin;
   }
 }
 
 @layer components {
-  /* Gradient text used across every section heading. */
+  /* Gradient text used across every section heading.
+
+     Three rungs of the ladder, brightest first. The old version ended on a
+     violet that was the only warm-side hue in the type on the whole site, and
+     at display sizes it was the first thing the eye landed on — so it set the
+     page's colour identity from a stop that appeared nowhere else. */
   .grad-text {
-    background: linear-gradient(120deg, #60a5fa 0%, #22d3ee 45%, #a78bfa 100%);
+    background: linear-gradient(112deg, #a5d8ff 0%, #38bdf8 46%, #22d3ee 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -102,7 +150,8 @@
   .caret {
     width: 2px;
     height: 1.05em;
-    background: #60a5fa;
+    background: #38bdf8;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.75);
     animation: caret-blink 1.05s steps(1, end) infinite;
   }
 

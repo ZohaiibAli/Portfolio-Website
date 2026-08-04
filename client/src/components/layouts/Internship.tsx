@@ -65,7 +65,7 @@ const DOMAINS = [
   { label: "REST API Design", icon: "◈", color: "#22D3EE" },
   { label: "Responsive UI/UX", icon: "◧", color: "#34D399" },
   { label: "Database Design", icon: "⬟", color: "#F59E0B" },
-  { label: "Real-time Systems", icon: "◉", color: "#7C3AED" },
+  { label: "Real-time Systems", icon: "◉", color: "#0EA5E9" },
   { label: "Performance Opt.", icon: "⬠", color: "#F87171" },
 ];
 
@@ -79,7 +79,7 @@ const PROFICIENCY = [
   { label: "Frontend Dev", pct: 90, color: "#60A5FA" },
   { label: "Backend Dev", pct: 85, color: "#34D399" },
   { label: "API Design", pct: 82, color: "#22D3EE" },
-  { label: "Database Design", pct: 75, color: "#7C3AED" },
+  { label: "Database Design", pct: 75, color: "#0EA5E9" },
 ];
 
 /* ── Timeline ─────────────────────────────────────────────────────────── */
@@ -132,7 +132,7 @@ function TimelineItem({ item, index, isLast }: { item: Entry; index: number; isL
             className="mt-2 w-px flex-1"
             style={{
               minHeight: 48,
-              background: `linear-gradient(to bottom, ${alpha(item.color, 0.35)}, rgba(255,255,255,0.04))`,
+              background: `linear-gradient(to bottom, ${alpha(item.color, 0.35)}, rgba(96,165,250,0.06))`,
               transformOrigin: "top",
             }}
             initial={{ scaleY: 0 }}
@@ -172,7 +172,7 @@ function TimelineItem({ item, index, isLast }: { item: Entry; index: number; isL
                   fontFamily: "var(--font-display)",
                   fontSize: 15,
                   fontWeight: 700,
-                  color: "#F1F5F9",
+                  color: "#E9F1FF",
                   letterSpacing: "-0.03em",
                 }}
               >
@@ -185,16 +185,16 @@ function TimelineItem({ item, index, isLast }: { item: Entry; index: number; isL
           </div>
 
           <span className="flex-shrink-0 text-right">
-            <span className="mono block" style={{ fontSize: 11, color: "#475569", letterSpacing: "0.06em" }}>
+            <span className="mono block" style={{ fontSize: 11, color: "#455C78", letterSpacing: "0.06em" }}>
               {item.period}
             </span>
-            <span className="mono block" style={{ fontSize: 10, color: "#2C3E55", marginTop: 2 }}>
+            <span className="mono block" style={{ fontSize: 10, color: "#28425F", marginTop: 2 }}>
               {item.location}
             </span>
           </span>
         </div>
 
-        <p style={{ fontSize: 13, color: "#64748B", lineHeight: 1.78, marginBottom: 13 }}>
+        <p style={{ fontSize: 13, color: "#607E9E", lineHeight: 1.78, marginBottom: 13 }}>
           {item.description}
         </p>
 
@@ -211,7 +211,7 @@ function TimelineItem({ item, index, isLast }: { item: Entry; index: number; isL
                 transition={{ duration: 0.32, delay: i * 0.05, ease: EASE_OUT }}
               >
                 <span style={{ color: item.color, fontSize: 12, marginTop: 3, flexShrink: 0 }}>▸</span>
-                <p style={{ fontSize: 12.5, color: "#4E6280", lineHeight: 1.72, margin: 0 }}>{h}</p>
+                <p style={{ fontSize: 12.5, color: "#4F6C90", lineHeight: 1.72, margin: 0 }}>{h}</p>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -272,15 +272,15 @@ function TimelineItem({ item, index, isLast }: { item: Entry; index: number; isL
 /* ── Profile pane ─────────────────────────────────────────────────────── */
 
 const CARD_LINES: { label: string; value?: string; color: string; size: number; weight: number; mono: boolean }[] = [
-  { label: "Zohaib Ali", color: "#F1F5F9", size: 18, weight: 700, mono: false },
+  { label: "Zohaib Ali", color: "#E9F1FF", size: 18, weight: 700, mono: false },
   { label: "Full Stack Developer Intern", color: "#60A5FA", size: 11, weight: 400, mono: true },
-  { label: "University", value: "NED UET", color: "#94A3B8", size: 11.5, weight: 600, mono: false },
-  { label: "Internships", value: INTERNSHIPS_COMPLETED, color: "#94A3B8", size: 11.5, weight: 600, mono: false },
-  { label: "Projects Shipped", value: PROJECTS_SHIPPED, color: "#94A3B8", size: 11.5, weight: 600, mono: false },
+  { label: "University", value: "NED UET", color: "#8FA8C8", size: 11.5, weight: 600, mono: false },
+  { label: "Internships", value: INTERNSHIPS_COMPLETED, color: "#8FA8C8", size: 11.5, weight: 600, mono: false },
+  { label: "Projects Shipped", value: PROJECTS_SHIPPED, color: "#8FA8C8", size: 11.5, weight: 600, mono: false },
   { label: "React.js · Node.js · Express.js", color: "#34D399", size: 11, weight: 400, mono: true },
   { label: "MongoDB · PostgreSQL · REST APIs", color: "#60A5FA", size: 11, weight: 400, mono: true },
-  { label: "WebSockets · H3 Geo · Tailwind CSS", color: "#7C3AED", size: 11, weight: 400, mono: true },
-  { label: "zohaibaliwork@gmail.com", color: "#334155", size: 10, weight: 400, mono: true },
+  { label: "WebSockets · H3 Geo · Tailwind CSS", color: "#0EA5E9", size: 11, weight: 400, mono: true },
+  { label: "zohaibaliwork@gmail.com", color: "#2E4560", size: 10, weight: 400, mono: true },
 ];
 
 function ProfileCard() {
@@ -296,7 +296,7 @@ function ProfileCard() {
           className="overflow-hidden"
           style={{
             borderRadius: 22,
-            background: "rgba(10,14,22,0.94)",
+            background: "rgba(6,11,24,0.94)",
             border: "1px solid rgba(96,165,250,0.16)",
             backdropFilter: "blur(24px)",
             boxShadow: "0 40px 90px rgba(0,0,0,0.65), 0 0 80px rgba(37,99,235,0.09)",
@@ -305,12 +305,12 @@ function ProfileCard() {
           {/* Title bar */}
           <div
             className="flex items-center gap-2 px-4 py-3"
-            style={{ background: "#151A22", borderBottom: "1px solid #1E242E" }}
+            style={{ background: "#0B1224", borderBottom: "1px solid #151E36" }}
           >
             {["#FF5F57", "#FFBD2E", "#28C840"].map((c) => (
               <span key={c} className="h-2.5 w-2.5 rounded-full" style={{ background: c }} />
             ))}
-            <span className="mono ml-2" style={{ fontSize: 11, color: "#4B5563", letterSpacing: "0.05em" }}>
+            <span className="mono ml-2" style={{ fontSize: 11, color: "#465A73", letterSpacing: "0.05em" }}>
               intern_profile.json
             </span>
             <span className="mono ml-auto flex items-center gap-1.5" style={{ fontSize: 10, color: "#34D399" }}>
@@ -328,7 +328,7 @@ function ProfileCard() {
                 width: 48,
                 height: 48,
                 borderRadius: 13,
-                background: "linear-gradient(135deg, rgba(37,99,235,0.18), rgba(124,58,237,0.07))",
+                background: "linear-gradient(135deg, rgba(37,99,235,0.18), rgba(14,165,233,0.07))",
                 border: "1px solid rgba(96,165,250,0.22)",
                 color: "#60A5FA",
                 fontSize: 20,
@@ -359,7 +359,7 @@ function ProfileCard() {
                   {line.label}
                 </span>
                 {line.value && (
-                  <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: "#F1F5F9" }}>
+                  <span className="mono" style={{ fontSize: 12, fontWeight: 700, color: "#E9F1FF" }}>
                     {line.value}
                   </span>
                 )}
@@ -381,14 +381,14 @@ function ProfileCard() {
                 key={s.label}
                 style={{
                   padding: "11px 14px",
-                  borderBottom: i < PROFICIENCY.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+                  borderBottom: i < PROFICIENCY.length - 1 ? "1px solid rgba(96,165,250,0.06)" : "none",
                 }}
               >
                 <div className="mono mb-1.5 flex justify-between" style={{ fontSize: 10 }}>
-                  <span style={{ color: "#64748B", letterSpacing: "0.07em" }}>{s.label}</span>
+                  <span style={{ color: "#607E9E", letterSpacing: "0.07em" }}>{s.label}</span>
                   <span style={{ color: s.color }}>{s.pct}%</span>
                 </div>
-                <div className="overflow-hidden" style={{ height: 3, borderRadius: 999, background: "rgba(255,255,255,0.06)" }}>
+                <div className="overflow-hidden" style={{ height: 3, borderRadius: 999, background: "rgba(96,165,250,0.11)" }}>
                   <motion.div
                     style={{
                       height: "100%",
@@ -450,7 +450,7 @@ export default function Internship() {
     <Section id="internship" label="Internship Experience">
       <SectionHeading eyebrow="internship experience" title="Real Codebases," accent="Real Impact">
         Professional internships where I shipped{" "}
-        <span style={{ color: "#94A3B8" }}>production code</span> — from digital library platforms
+        <span style={{ color: "#8FA8C8" }}>production code</span> — from digital library platforms
         to full company websites built from scratch.
       </SectionHeading>
 
@@ -478,7 +478,7 @@ export default function Internship() {
                   lineHeight: 1,
                 }}
               />
-              <span style={{ display: "block", marginTop: 7, fontSize: 12.5, color: "#64748B", lineHeight: 1.4 }}>
+              <span style={{ display: "block", marginTop: 7, fontSize: 12.5, color: "#607E9E", lineHeight: 1.4 }}>
                 {s.label}
               </span>
             </SpotlightCard>
@@ -491,7 +491,7 @@ export default function Internship() {
           <Reveal>
             <div
               className="mono mb-6 flex items-center gap-3"
-              style={{ fontSize: 11, color: "#334155", letterSpacing: "0.14em", textTransform: "uppercase" }}
+              style={{ fontSize: 11, color: "#2E4560", letterSpacing: "0.14em", textTransform: "uppercase" }}
             >
               <span>Internship History</span>
               <span style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(96,165,250,0.22), transparent)" }} />
@@ -512,7 +512,7 @@ export default function Internship() {
                   scaleY: fillOn ? fill : 1,
                   transformOrigin: "top",
                   borderRadius: 999,
-                  background: "linear-gradient(to bottom, #2563EB, #22D3EE, #7C3AED)",
+                  background: "linear-gradient(to bottom, #2563EB, #22D3EE, #0EA5E9)",
                   boxShadow: "0 0 14px rgba(37,99,235,0.6)",
                   opacity: 0.65,
                 }}
@@ -527,7 +527,7 @@ export default function Internship() {
           <Reveal delay={0.2} className="mt-10">
             <div
               className="mono mb-5 flex items-center gap-3"
-              style={{ fontSize: 11, color: "#334155", letterSpacing: "0.14em", textTransform: "uppercase" }}
+              style={{ fontSize: 11, color: "#2E4560", letterSpacing: "0.14em", textTransform: "uppercase" }}
             >
               <span>Core Competencies</span>
               <span style={{ flex: 1, height: 1, background: "linear-gradient(90deg, rgba(96,165,250,0.22), transparent)" }} />
@@ -561,15 +561,15 @@ export default function Internship() {
                 }
                 style={{
                   padding: "12px 14px",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  background: "rgba(96,165,250,0.05)",
+                  border: "1px solid rgba(96,165,250,0.13)",
                   backdropFilter: "blur(10px)",
                 }}
               >
                 <span style={{ fontSize: 15, color: d.color, filter: `drop-shadow(0 0 6px ${alpha(d.color, 0.5)})` }}>
                   {d.icon}
                 </span>
-                <span style={{ fontSize: 13, color: "#94A3B8", fontWeight: 500 }}>{d.label}</span>
+                <span style={{ fontSize: 13, color: "#8FA8C8", fontWeight: 500 }}>{d.label}</span>
               </motion.div>
             ))}
           </div>
@@ -605,7 +605,7 @@ export default function Internship() {
                     >
                       {item.company}
                     </span>
-                    <span className="mono block" style={{ fontSize: 10, color: "#334155", marginTop: 2, letterSpacing: "0.06em" }}>
+                    <span className="mono block" style={{ fontSize: 10, color: "#2E4560", marginTop: 2, letterSpacing: "0.06em" }}>
                       View Certificate ↗
                     </span>
                   </span>
@@ -627,7 +627,7 @@ export default function Internship() {
           </div>
 
           <Reveal delay={0.35} className="mt-4">
-            <div className="mono flex items-center justify-center gap-2" style={{ fontSize: 10.5, color: "#334155", letterSpacing: "0.08em" }}>
+            <div className="mono flex items-center justify-center gap-2" style={{ fontSize: 10.5, color: "#2E4560", letterSpacing: "0.08em" }}>
               <LiveDot size={6} />
               NED UET · Software Engineering · 2024 — Present
             </div>

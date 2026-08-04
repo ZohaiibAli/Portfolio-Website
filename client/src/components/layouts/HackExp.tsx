@@ -70,7 +70,7 @@ const HACKATHONS: Hackathon[] = [
     role: "Full Stack Developer",
     org: "Sir Syed University",
     location: "Karachi, Pakistan",
-    color: "#7C3AED",
+    color: "#0EA5E9",
     icon: "◉",
     tagline: "Textile Industry Operations",
     badge: "Sir Syed · 2024",
@@ -86,7 +86,7 @@ const HACKATHONS: Hackathon[] = [
 
 const STATS = [
   { value: "3", label: "Hackathons competed", color: "#22D3EE" },
-  { value: "6+", label: "Technologies used", color: "#7C3AED" },
+  { value: "6+", label: "Technologies used", color: "#0EA5E9" },
   { value: "Top", label: "Performer each time", color: "#F59E0B" },
 ];
 
@@ -145,7 +145,7 @@ function HackathonCard({ item, index, side }: { item: Hackathon; index: number; 
                 fontFamily: "var(--font-display)",
                 fontSize: 15.5,
                 fontWeight: 700,
-                color: "#F1F5F9",
+                color: "#E9F1FF",
                 letterSpacing: "-0.03em",
                 lineHeight: 1.25,
               }}
@@ -158,7 +158,7 @@ function HackathonCard({ item, index, side }: { item: Hackathon; index: number; 
         <p className="mono" style={{ fontSize: 11, color: alpha(item.color, 0.8), letterSpacing: "0.04em" }}>
           {item.role} · {item.org}
         </p>
-        <p style={{ margin: "5px 0 13px", fontSize: 12, color: "#94A3B8", fontStyle: "italic" }}>
+        <p style={{ margin: "5px 0 13px", fontSize: 12, color: "#8FA8C8", fontStyle: "italic" }}>
           {item.tagline}
         </p>
 
@@ -175,7 +175,7 @@ function HackathonCard({ item, index, side }: { item: Hackathon; index: number; 
                 transition={{ duration: 0.32, delay: i * 0.04, ease: EASE_OUT }}
               >
                 <span style={{ color: item.color, fontSize: 12.5, marginTop: 3, flexShrink: 0 }}>▸</span>
-                <p style={{ fontSize: 12.5, color: "#64748B", lineHeight: 1.75, margin: 0 }}>{h}</p>
+                <p style={{ fontSize: 12.5, color: "#607E9E", lineHeight: 1.75, margin: 0 }}>{h}</p>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -234,7 +234,7 @@ function YearPlate({ item, side }: { item: Hackathon; side: "left" | "right" }) 
       >
         {item.year}
       </span>
-      <span className="mono" style={{ display: "block", marginTop: 6, fontSize: 11.5, color: "#475569" }}>
+      <span className="mono" style={{ display: "block", marginTop: 6, fontSize: 11.5, color: "#455C78" }}>
         {item.location}
       </span>
     </motion.div>
@@ -275,7 +275,7 @@ export default function HackExp() {
     <Section id="hackathons" label="Hackathon Experience">
       <SectionHeading eyebrow="hackathon experience" title="Built Under Pressure," accent="Shipped to Win">
         Competitive hackathons across Karachi's top universities — tight deadlines met{" "}
-        <span style={{ color: "#94A3B8" }}>full-stack engineering</span> and creative problem-solving.
+        <span style={{ color: "#8FA8C8" }}>full-stack engineering</span> and creative problem-solving.
       </SectionHeading>
 
       {/* ── Desktop: alternating centre rail ── */}
@@ -297,7 +297,7 @@ export default function HackExp() {
             scaleY: fillOn ? fill : 1,
             transformOrigin: "top",
             borderRadius: 999,
-            background: "linear-gradient(to bottom, #2563EB, #22D3EE, #7C3AED)",
+            background: "linear-gradient(to bottom, #2563EB, #22D3EE, #0EA5E9)",
             boxShadow: "0 0 14px rgba(37,99,235,0.6), 0 0 34px rgba(37,99,235,0.25)",
           }}
         />
@@ -340,7 +340,7 @@ export default function HackExp() {
                 >
                   <motion.span
                     className="block rounded-full"
-                    style={{ width: 15, height: 15, background: item.color, border: "3px solid #060A12" }}
+                    style={{ width: 15, height: 15, background: item.color, border: "3px solid #03060F" }}
                     /* Paint property, infinite loop — see the matching note in
                        `Internship`. High tier only. */
                     animate={
@@ -381,7 +381,7 @@ export default function HackExp() {
             className="absolute inset-x-0 top-0"
             style={{
               borderRadius: 999,
-              background: "linear-gradient(to bottom, #2563EB, #22D3EE, #7C3AED)",
+              background: "linear-gradient(to bottom, #2563EB, #22D3EE, #0EA5E9)",
               boxShadow: "0 0 12px rgba(37,99,235,0.55)",
             }}
             initial={{ height: "0%" }}
@@ -402,7 +402,7 @@ export default function HackExp() {
                   width: 13,
                   height: 13,
                   background: item.color,
-                  border: "3px solid #060A12",
+                  border: "3px solid #03060F",
                   zIndex: 2,
                 }}
                 initial={{ scale: 0 }}
@@ -444,7 +444,7 @@ export default function HackExp() {
                   lineHeight: 1,
                 }}
               />
-              <span style={{ display: "block", marginTop: 7, fontSize: 12.5, color: "#64748B" }}>{s.label}</span>
+              <span style={{ display: "block", marginTop: 7, fontSize: 12.5, color: "#607E9E" }}>{s.label}</span>
             </SpotlightCard>
           </Reveal>
         ))}

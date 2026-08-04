@@ -16,7 +16,7 @@ const PALETTE = [
   [96, 165, 250], // blue
   [34, 211, 238], // cyan
   [52, 211, 153], // green
-  [167, 139, 250], // violet
+  [125, 211, 252], // sky
 ];
 
 /** Max link length in px. Doubles as the spatial-grid cell size. */
