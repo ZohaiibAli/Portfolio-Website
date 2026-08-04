@@ -1,6 +1,7 @@
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import ParticleCanvas from "./ParticleCanvas";
-import { usePointer } from "@/lib/usePointer";
+import { usePointer, useHasFinePointer } from "@/lib/usePointer";
+import { useQuality } from "@/lib/useQuality";
 import { EASE_INOUT } from "@/lib/motion";
 
 /* Procedural grain — a data URI so the strict-CSP-friendly build ships no
@@ -25,7 +26,16 @@ interface BlobProps {
   drift: [number, number];
 }
 
-/** A slow-breathing aurora lobe. Transform + opacity only, so it composites. */
+/**
+ * A slow-breathing aurora lobe.
+ *
+ * Animates transform and opacity only, so the compositor owns it. The static
+ * `filter: blur()` is set once and never animated — a blurred layer is cheap
+ * to *move*, but re-blurring it every frame is not, which is why the drift is
+ * a translate rather than a change in blur radius. The gradient's own falloff
+ * does most of the softening; the blur only kills banding, so it can be far
+ * smaller than it looks like it needs to be.
+ */
 function Blob({ color, size, left, top, duration, delay = 0, drift }: BlobProps) {
   const reduced = useReducedMotion();
 
@@ -39,7 +49,7 @@ function Blob({ color, size, left, top, duration, delay = 0, drift }: BlobProps)
         width: size,
         height: size,
         background: `radial-gradient(circle at 50% 50%, ${color} 0%, transparent 68%)`,
-        filter: "blur(28px)",
+        filter: "blur(14px)",
         translateX: "-50%",
         translateY: "-50%",
       }}
@@ -67,6 +77,8 @@ function Blob({ color, size, left, top, duration, delay = 0, drift }: BlobProps)
  */
 export default function SceneBackground() {
   const reduced = useReducedMotion();
+  const high = useQuality() === "high";
+  const fine = useHasFinePointer();
   const { sx, sy } = usePointer();
   const { scrollYProgress } = useScroll();
 
@@ -74,8 +86,6 @@ export default function SceneBackground() {
   const parallax = useSpring(scrollYProgress, { stiffness: 40, damping: 22 });
   const auroraY = useTransform(parallax, [0, 1], ["0%", "-14%"]);
   const gridY = useTransform(parallax, [0, 1], ["0%", "-6%"]);
-  const hueShift = useTransform(parallax, [0, 1], [0, 42]);
-  const hueFilter = useTransform(hueShift, (h) => `hue-rotate(${h}deg)`);
 
   return (
     <div
@@ -83,15 +93,23 @@ export default function SceneBackground() {
       className="pointer-events-none fixed inset-0 overflow-hidden"
       style={{ zIndex: 0, backgroundColor: "#060A12" }}
     >
-      {/* ── Aurora ─────────────────────────────────────────────────────── */}
-      <motion.div
-        className="absolute inset-0"
-        style={{ y: reduced ? 0 : auroraY, filter: reduced ? undefined : hueFilter }}
-      >
+      {/* ── Aurora ───────────────────────────────────────────────────────
+          The container used to carry a scroll-linked `hue-rotate`. A filter on
+          a full-viewport element is recomputed on every scroll frame and
+          forces its whole subtree — four large blurred lobes — to re-render
+          with it. The colour shift was worth a few degrees of hue and cost
+          more than everything else on this layer combined. */}
+      <motion.div className="absolute inset-0" style={{ y: reduced ? 0 : auroraY }}>
         <Blob color="rgba(37,99,235,0.30)" size={820} left="18%" top="12%" duration={26} drift={[70, 50]} />
         <Blob color="rgba(124,58,237,0.24)" size={720} left="82%" top="26%" duration={31} delay={2} drift={[-80, 60]} />
-        <Blob color="rgba(34,211,238,0.18)" size={640} left="62%" top="72%" duration={35} delay={4} drift={[60, -70]} />
-        <Blob color="rgba(52,211,153,0.16)" size={560} left="12%" top="82%" duration={29} delay={1.5} drift={[-50, -55]} />
+        {/* The back two lobes are the least legible and the largest to
+            composite — high tier only. */}
+        {high && (
+          <>
+            <Blob color="rgba(34,211,238,0.18)" size={640} left="62%" top="72%" duration={35} delay={4} drift={[60, -70]} />
+            <Blob color="rgba(52,211,153,0.16)" size={560} left="12%" top="82%" duration={29} delay={1.5} drift={[-50, -55]} />
+          </>
+        )}
       </motion.div>
 
       {/* ── Grid ───────────────────────────────────────────────────────── */}
@@ -118,29 +136,40 @@ export default function SceneBackground() {
       <ParticleCanvas />
 
       {/* ── Cursor spotlight ───────────────────────────────────────────
-          Driven by motion values, so it tracks without re-rendering React. */}
-      <motion.div
-        className="absolute rounded-full gpu"
-        style={{
-          left: sx,
-          top: sy,
-          width: 760,
-          height: 760,
-          translateX: "-50%",
-          translateY: "-50%",
-          background:
-            "radial-gradient(circle, rgba(96,165,250,0.10) 0%, rgba(124,58,237,0.05) 38%, transparent 68%)",
-        }}
-      />
+          Driven by motion values, so it tracks without re-rendering React.
+          Nothing to track on a touch device, where it would just be a 760px
+          layer pinned to the middle of the screen. */}
+      {fine && (
+        <motion.div
+          className="absolute rounded-full gpu"
+          style={{
+            // `x`/`y` rather than `left`/`top`: the same movement, but as a
+            // transform it never invalidates layout.
+            x: sx,
+            y: sy,
+            left: 0,
+            top: 0,
+            width: 760,
+            height: 760,
+            marginLeft: -380,
+            marginTop: -380,
+            background:
+              "radial-gradient(circle, rgba(96,165,250,0.10) 0%, rgba(124,58,237,0.05) 38%, transparent 68%)",
+          }}
+        />
+      )}
 
-      {/* ── Grain ──────────────────────────────────────────────────────── */}
+      {/* ── Grain ────────────────────────────────────────────────────────
+          `mix-blend-mode` here forced the browser to re-blend this layer
+          against the animating aurora beneath it on every frame, for the whole
+          viewport. A plain low-opacity tile is indistinguishable over a
+          backdrop this dark and costs nothing. */}
       <div
         className="absolute inset-0"
         style={{
           backgroundImage: `url("${GRAIN}")`,
           backgroundRepeat: "repeat",
-          opacity: 0.16,
-          mixBlendMode: "overlay",
+          opacity: 0.1,
         }}
       />
 

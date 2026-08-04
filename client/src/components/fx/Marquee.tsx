@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useAnimationFrame,
@@ -34,8 +34,24 @@ export default function Marquee({ items, speed = 42, className }: Props) {
 
   const direction = useRef(1);
 
+  // The ticker sits in the hero, so it spends most of the session scrolled
+  // past — but its frame loop and velocity spring ran regardless, for the life
+  // of the page. Nothing should animate where it cannot be seen.
+  const hostRef = useRef<HTMLDivElement>(null);
+  const [onScreen, setOnScreen] = useState(true);
+
+  useEffect(() => {
+    const el = hostRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([entry]) => setOnScreen(entry.isIntersecting), {
+      rootMargin: "120px",
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   useAnimationFrame((_, delta) => {
-    if (reduced) return;
+    if (reduced || !onScreen) return;
 
     const v = velocityFactor.get();
     // A hard scroll can flip the ticker's travel direction.
@@ -52,6 +68,7 @@ export default function Marquee({ items, speed = 42, className }: Props) {
 
   return (
     <div
+      ref={hostRef}
       className={className}
       style={{
         position: "relative",

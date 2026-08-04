@@ -329,9 +329,9 @@ export default function Navbar() {
                     key={l.href}
                     href={l.href}
                     onClick={(e) => go(e, l.href)}
-                    initial={{ opacity: 0, x: -32, filter: "blur(8px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, x: -20, filter: "blur(6px)" }}
+                    initial={{ opacity: 0, x: -32 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
                     transition={{ delay: 0.14 + i * 0.06, duration: 0.5, ease: EASE_OUT }}
                     className="flex items-baseline gap-4"
                     style={{ padding: "12px 0", textDecoration: "none" }}

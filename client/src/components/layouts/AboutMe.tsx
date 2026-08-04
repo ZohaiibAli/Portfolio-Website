@@ -106,16 +106,17 @@ export default function AboutMe() {
                 animate={reduced ? undefined : { y: [0, -10, 0] }}
                 transition={{ duration: 7, repeat: Infinity, ease: EASE_INOUT }}
               >
-                {/* Aura */}
+                {/* Aura — softness comes from the gradient falloff, not from a
+                    filter: this sits inside a continuously floating parent, so
+                    a blur here would be re-rasterised on every frame of it. */}
                 <div
                   aria-hidden="true"
                   className="absolute rounded-[32px]"
                   style={{
                     inset: -26,
                     opacity: 0.3,
-                    filter: "blur(32px)",
                     background:
-                      "radial-gradient(ellipse, #2563EB 0%, #7C3AED 48%, transparent 72%)",
+                      "radial-gradient(ellipse, #2563EB 0%, #7C3AED 42%, transparent 74%)",
                   }}
                 />
 

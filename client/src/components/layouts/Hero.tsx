@@ -74,6 +74,47 @@ function useTypewriter(texts: string[], speed = 62, pause = 1900): string {
   return reduced ? texts[0] : out;
 }
 
+/**
+ * The typed role line, isolated in its own component.
+ *
+ * The typewriter changes state roughly sixteen times a second. Held in `Hero`,
+ * every one of those ticks re-rendered the entire hero subtree — both columns,
+ * the tilt card, the code editor, all three parallax metric cards — while the
+ * hero is also the section most likely to be mid-entrance. Owning the state
+ * down here means a tick reconciles one text node.
+ */
+function TypedRole() {
+  const role = useTypewriter(ROLES);
+  const reduced = useReducedMotion();
+
+  return (
+    <motion.div
+      className="flex h-9 items-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.75, duration: 0.6 }}
+    >
+      <span
+        className="mono font-semibold"
+        style={{
+          color: "#60A5FA",
+          fontSize: "clamp(1.05rem, 3.6vw, 1.7rem)",
+          letterSpacing: "-0.02em",
+          textShadow: "0 0 26px rgba(96,165,250,0.35)",
+        }}
+      >
+        {role}
+        <motion.span
+          className="ml-1 inline-block align-middle"
+          style={{ width: 2, height: "1.05em", background: "#60A5FA" }}
+          animate={reduced ? undefined : { opacity: [1, 0, 1] }}
+          transition={{ duration: 1.05, repeat: Infinity, ease: "linear" }}
+        />
+      </span>
+    </motion.div>
+  );
+}
+
 /* ── Code editor ──────────────────────────────────────────────────────── */
 
 type Token = { t: string; c: string };
@@ -275,7 +316,6 @@ function Metric({ label, value, sub, color, delay, x, y, depth, px, py }: Metric
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
-  const role = useTypewriter(ROLES);
   const { x, y } = usePointer();
 
   // Pointer as a 0…1 fraction of the viewport, spring-damped. Computed per
@@ -313,8 +353,8 @@ export default function Hero() {
         <div className="flex w-full flex-1 flex-col items-center text-center lg:items-start lg:text-left">
           <motion.span
             className="mono inline-flex items-center gap-2.5 rounded-full"
-            initial={{ opacity: 0, y: -14, filter: "blur(6px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: -14 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15, ease: EASE_OUT }}
             style={{
               padding: "6px 16px",
@@ -346,34 +386,11 @@ export default function Hero() {
           </h1>
 
           {/* Typed role */}
-          <motion.div
-            className="flex h-9 items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.75, duration: 0.6 }}
-          >
-            <span
-              className="mono font-semibold"
-              style={{
-                color: "#60A5FA",
-                fontSize: "clamp(1.05rem, 3.6vw, 1.7rem)",
-                letterSpacing: "-0.02em",
-                textShadow: "0 0 26px rgba(96,165,250,0.35)",
-              }}
-            >
-              {role}
-              <motion.span
-                className="ml-1 inline-block align-middle"
-                style={{ width: 2, height: "1.05em", background: "#60A5FA" }}
-                animate={reduced ? undefined : { opacity: [1, 0, 1] }}
-                transition={{ duration: 1.05, repeat: Infinity, ease: "linear" }}
-              />
-            </span>
-          </motion.div>
+          <TypedRole />
 
           <motion.p
-            initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.85, ease: EASE_OUT }}
             style={{
               margin: "24px 0 38px",
@@ -428,8 +445,8 @@ export default function Hero() {
         <motion.div
           className="relative hidden flex-1 lg:block"
           style={{ minHeight: 440 }}
-          initial={{ opacity: 0, x: 60, filter: "blur(14px)" }}
-          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0, x: 60, scale: 0.97 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 1.1, delay: 0.5, ease: EASE_SOFT }}
         >
           <Metric label="Projects Shipped" value="6+" sub="full-stack builds" color="#34D399" delay={1.4} x="2%" y="10%" depth={26} px={px} py={py} />
@@ -468,16 +485,20 @@ export default function Hero() {
             </span>
           </motion.div>
 
-          {/* Glow bed behind the editor stack */}
+          {/* Glow bed behind the editor stack.
+
+              The gradient carries the softness on its own. It used to sit
+              under a `blur(26px)`, which re-rasterised the whole bed every
+              frame the hero scaled away on scroll — a filter buys nothing over
+              a radial that is already a smooth falloff. */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute"
             style={{
               inset: -50,
               zIndex: -1,
-              filter: "blur(26px)",
               background:
-                "radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.16) 0%, rgba(124,58,237,0.08) 48%, transparent 72%)",
+                "radial-gradient(ellipse at 50% 50%, rgba(37,99,235,0.17) 0%, rgba(124,58,237,0.09) 42%, transparent 74%)",
             }}
           />
         </motion.div>

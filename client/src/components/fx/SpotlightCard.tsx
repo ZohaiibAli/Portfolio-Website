@@ -1,6 +1,8 @@
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { motion, useMotionTemplate, useMotionValue, useReducedMotion } from "framer-motion";
 import { alpha } from "@/lib/motion";
+import { useHoverRect } from "@/lib/useHoverRect";
+import { useQuality } from "@/lib/useQuality";
 
 interface Props {
   children: ReactNode;
@@ -30,7 +32,9 @@ export default function SpotlightCard({
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
+  const high = useQuality() === "high";
   const [hovered, setHovered] = useState(false);
+  const bounds = useHoverRect(ref);
 
   const mx = useMotionValue(-9999);
   const my = useMotionValue(-9999);
@@ -46,34 +50,56 @@ export default function SpotlightCard({
 
   const onMove = useCallback(
     (e: React.PointerEvent) => {
-      const el = ref.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
+      const r = bounds.get();
+      if (!r) return;
       mx.set(e.clientX - r.left);
       my.set(e.clientY - r.top);
     },
-    [mx, my]
+    [bounds, mx, my]
   );
+
+  const onEnter = useCallback(() => {
+    bounds.enter();
+    setHovered(true);
+  }, [bounds]);
+
+  const onLeave = useCallback(() => {
+    bounds.leave();
+    setHovered(false);
+    mx.set(-9999);
+    my.set(-9999);
+  }, [bounds, mx, my]);
+
+  /* Glass is the most expensive property on the page: the browser must sample,
+     blur and re-composite everything behind the card — and behind these cards
+     is a canvas and a drifting aurora, so it can never be cached. With sixteen
+     of them on screen it is the difference between 60fps and 20. On the low
+     tier the panel is opaque enough to read as glass without sampling
+     anything; a matching CSS rule strips the rest of the site's inline
+     `backdrop-filter`s the same way. */
+  const glass = high ? "blur(18px) saturate(140%)" : undefined;
 
   return (
     <div
       ref={ref}
       className={className}
       onPointerMove={reduced ? undefined : onMove}
-      onPointerEnter={() => setHovered(true)}
-      onPointerLeave={() => {
-        setHovered(false);
-        mx.set(-9999);
-        my.set(-9999);
-      }}
+      onPointerEnter={onEnter}
+      onPointerLeave={onLeave}
       style={{
         ...style,
         position: "relative",
         borderRadius: radius,
-        background: hovered ? "rgba(255,255,255,0.045)" : "rgba(255,255,255,0.022)",
+        background: high
+          ? hovered
+            ? "rgba(255,255,255,0.045)"
+            : "rgba(255,255,255,0.022)"
+          : hovered
+          ? "rgba(19,25,36,0.92)"
+          : "rgba(15,20,30,0.88)",
         border: "1px solid rgba(255,255,255,0.07)",
-        backdropFilter: "blur(18px) saturate(140%)",
-        WebkitBackdropFilter: "blur(18px) saturate(140%)",
+        backdropFilter: glass,
+        WebkitBackdropFilter: glass,
         boxShadow: hovered
           ? `0 0 38px ${alpha(accent, 0.16)}, 0 22px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06)`
           : "0 6px 28px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.035)",
@@ -83,7 +109,7 @@ export default function SpotlightCard({
       }}
     >
       {/* Glowing edge: paint the gradient, then mask everything but the border. */}
-      {!reduced && (
+      {!reduced && high && (
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
@@ -101,7 +127,7 @@ export default function SpotlightCard({
       )}
 
       {/* Interior wash */}
-      {!reduced && (
+      {!reduced && high && (
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"

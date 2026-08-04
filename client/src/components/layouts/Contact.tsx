@@ -28,8 +28,8 @@ function ContactLink({ item, index }: { item: (typeof LINKS)[number]; index: num
       target={item.href.startsWith("http") ? "_blank" : undefined}
       rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
       className="flex items-center gap-3.5 rounded-xl"
-      initial={{ opacity: 0, x: -24, filter: "blur(6px)" }}
-      whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, x: -24, scale: 0.985 }}
+      whileInView={{ opacity: 1, x: 0, scale: 1 }}
       viewport={VIEWPORT}
       transition={{ duration: 0.55, delay: index * 0.08, ease: EASE_OUT }}
       whileHover={reduced ? undefined : { x: 6 }}

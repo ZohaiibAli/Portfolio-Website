@@ -98,8 +98,8 @@ function HackathonCard({ item, index, side }: { item: Hackathon; index: number; 
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: side === "left" ? -48 : 48, y: 20, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, x: side === "left" ? -48 : 48, y: 20, scale: 0.98 }}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
       viewport={VIEWPORT}
       transition={{ duration: 0.75, delay: index * 0.08, ease: EASE_OUT }}
       whileHover={reduced ? undefined : { y: -5 }}

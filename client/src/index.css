@@ -92,11 +92,46 @@
 }
 
 @layer utilities {
-  /* Force GPU compositing on elements we animate continuously. */
+  /* Force GPU compositing on elements we animate continuously.
+
+     `will-change` is deliberately narrow. It is a promise the browser keeps by
+     holding a permanent compositing layer, and every element carrying it costs
+     memory for the whole session — so it belongs only on the handful of things
+     that genuinely never stop moving (the aurora lobes, the floating hero
+     metrics), never as a general "make it fast" class. */
   .gpu {
     transform: translateZ(0);
     will-change: transform, opacity;
   }
+}
+
+/*
+  ── Quality tier ──────────────────────────────────────────────────────────
+  `useQuality()` stamps `data-quality` on <html> before first paint.
+
+  `backdrop-filter` is the most expensive property in use here: the browser has
+  to sample, blur and re-composite everything behind the element, and behind
+  these panels sits an animating canvas and a drifting aurora — so the result
+  can never be cached between frames. There are seventeen such surfaces across
+  the site, several on screen at once, all set as inline styles from component
+  code. Rather than thread a tier prop through every one of them, the tier is
+  enforced here in a single rule; a stylesheet `!important` outranks an inline
+  declaration, which is exactly the override we want.
+
+  The panels underneath are already near-opaque, so on this tier they read as
+  solid dark glass instead of blurred glass. That is a difference nobody
+  notices next to the frame rate it buys back.
+*/
+[data-quality="low"] * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Compositing layers are cheap on a desktop GPU and scarce on a phone. Drop
+   the opacity half of the promise where memory is tight — these elements only
+   ever move. */
+[data-quality="low"] .gpu {
+  will-change: transform;
 }
 
 /*

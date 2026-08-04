@@ -21,15 +21,16 @@ export const SPRING_SOFT: Transition = { type: "spring", stiffness: 180, damping
 export const SPRING_CURSOR: Transition = { type: "spring", stiffness: 550, damping: 40, mass: 0.4 };
 
 /* ── Shared variants ──────────────────────────────────────────────────────
-   Blur is the signature of the entrance: things resolve into focus rather
-   than simply sliding, which reads far more "rendered" than a plain fade.   */
+   Transform and opacity only. These run on the compositor, so a staggered
+   list of thirty items costs the main thread nothing while it scrolls — an
+   animated `filter: blur()` would repaint every one of them, every frame.   */
 
 export const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 28, filter: "blur(10px)" },
+  hidden: { opacity: 0, y: 28, scale: 0.985 },
   show: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
+    scale: 1,
     transition: { duration: 0.75, ease: EASE_OUT },
   },
 };

@@ -196,8 +196,8 @@ function ProjectCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 44, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 44, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={VIEWPORT}
       transition={{ duration: 0.7, delay: index * 0.1, ease: EASE_OUT }}
       className="h-full"

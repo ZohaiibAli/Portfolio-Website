@@ -8,6 +8,8 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { useHasFinePointer } from "@/lib/usePointer";
+import { useHoverRect } from "@/lib/useHoverRect";
+import { useQuality } from "@/lib/useQuality";
 
 interface Props {
   children: ReactNode;
@@ -39,8 +41,10 @@ export default function TiltCard({
   const ref = useRef<HTMLDivElement>(null);
   const fine = useHasFinePointer();
   const reduced = useReducedMotion();
+  const high = useQuality() === "high";
   const active = fine && !reduced;
   const [hovered, setHovered] = useState(false);
+  const bounds = useHoverRect(ref);
 
   // Normalised pointer position within the card, -0.5 … 0.5.
   const px = useMotionValue(0);
@@ -58,20 +62,25 @@ export default function TiltCard({
 
   const onMove = useCallback(
     (e: React.PointerEvent) => {
-      const el = ref.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
+      const r = bounds.get();
+      if (!r) return;
       px.set((e.clientX - r.left) / r.width - 0.5);
       py.set((e.clientY - r.top) / r.height - 0.5);
     },
-    [px, py]
+    [bounds, px, py]
   );
 
+  const onEnter = useCallback(() => {
+    bounds.enter();
+    setHovered(true);
+  }, [bounds]);
+
   const onLeave = useCallback(() => {
+    bounds.leave();
     px.set(0);
     py.set(0);
     setHovered(false);
-  }, [px, py]);
+  }, [bounds, px, py]);
 
   if (!active) {
     return (
@@ -86,7 +95,7 @@ export default function TiltCard({
       <motion.div
         ref={ref}
         onPointerMove={onMove}
-        onPointerEnter={() => setHovered(true)}
+        onPointerEnter={onEnter}
         onPointerLeave={onLeave}
         style={{
           rotateX,
@@ -99,7 +108,11 @@ export default function TiltCard({
       >
         {children}
 
-        {glare && (
+        {/* The specular sweep repaints the card's background on every frame of
+            the hover and blends it against what it lights. That's a fair price
+            for one card at a time on a capable machine, and the first thing
+            worth dropping otherwise — the tilt alone still reads as physical. */}
+        {glare && high && (
           <motion.div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"

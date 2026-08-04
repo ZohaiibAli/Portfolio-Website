@@ -38,8 +38,8 @@ function SkillCard({ skill, index }: { skill: Skill; index: number }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 38, rotateX: -14, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 38, rotateX: -14, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
       viewport={VIEWPORT}
       transition={{ duration: 0.65, delay: (index % 3) * 0.08, ease: EASE_OUT }}
       whileHover={reduced ? undefined : { y: -6 }}

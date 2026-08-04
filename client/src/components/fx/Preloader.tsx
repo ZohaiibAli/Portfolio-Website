@@ -87,7 +87,10 @@ export default function Preloader({ onDone }: Props) {
           {/* Content sits above the panels and fades before they part. */}
           <motion.div
             className="relative flex flex-col items-center gap-8"
-            exit={{ opacity: 0, y: -24, filter: "blur(12px)", transition: { duration: 0.45, ease: EASE_OUT } }}
+            // No blur on the way out: this fires at the exact moment the hero's
+            // own entrance starts, on a full-screen element, when the main
+            // thread has the least room to spare all session.
+            exit={{ opacity: 0, y: -24, scale: 0.97, transition: { duration: 0.45, ease: EASE_OUT } }}
           >
             {/* Name — letters drop in from a clipped baseline. */}
             <div className="flex overflow-hidden" style={{ paddingBottom: "0.14em" }}>

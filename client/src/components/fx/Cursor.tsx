@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
-import { useHasFinePointer } from "@/lib/usePointer";
+import { motion, useSpring, useReducedMotion } from "framer-motion";
+import { useHasFinePointer, usePointer } from "@/lib/usePointer";
+import { useQuality } from "@/lib/useQuality";
 import { SPRING_CURSOR, SPRING_SNAP } from "@/lib/motion";
 
 type Mode = "idle" | "link" | "text" | "hidden";
@@ -16,9 +17,16 @@ function modeFor(el: Element | null): Mode {
 const RING_SIZE: Record<Mode, number> = { idle: 34, link: 62, text: 8, hidden: 0 };
 
 /**
- * Two-part cursor: a 1px dot that tracks instantly and a ring that trails on a
+ * Two-part cursor: a dot that tracks the pointer and a ring that trails on a
  * spring. The ring inflates over anything interactive and collapses into a
  * caret over text inputs, so the pointer itself becomes an affordance.
+ *
+ * Position comes from the shared pointer store — one listener for the page,
+ * published once per frame. Mode detection hangs off `pointerover`, which the
+ * browser fires only when the pointer crosses into a *different* element;
+ * running three `closest()` walks on every `pointermove` meant a full ancestor
+ * traversal several hundred times a second, each one able to schedule a React
+ * render, all to answer a question whose answer had not changed.
  *
  * Only mounted for hover-capable, fine pointers — touch and reduced-motion
  * users keep the native cursor.
@@ -26,35 +34,31 @@ const RING_SIZE: Record<Mode, number> = { idle: 34, link: 62, text: 8, hidden: 0
 export default function Cursor() {
   const fine = useHasFinePointer();
   const reduced = useReducedMotion();
+  const high = useQuality() === "high";
   const enabled = fine && !reduced;
 
   const [mode, setMode] = useState<Mode>("hidden");
   const [pressed, setPressed] = useState(false);
 
-  const x = useMotionValue(-100);
-  const y = useMotionValue(-100);
+  const { x, y } = usePointer();
   const ringX = useSpring(x, SPRING_CURSOR);
   const ringY = useSpring(y, SPRING_CURSOR);
 
   useEffect(() => {
     if (!enabled) return;
 
-    const onMove = (e: PointerEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-      setMode((prev) => {
-        const next = modeFor(e.target as Element);
-        return next === prev ? prev : next;
-      });
+    const onOver = (e: PointerEvent) => {
+      const next = modeFor(e.target as Element);
+      setMode((prev) => (next === prev ? prev : next));
     };
     const onDown = () => setPressed(true);
     const onUp = () => setPressed(false);
     const onLeave = () => setMode("hidden");
     const onEnter = () => setMode("idle");
 
-    window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("pointerdown", onDown);
-    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointerover", onOver, { passive: true });
+    window.addEventListener("pointerdown", onDown, { passive: true });
+    window.addEventListener("pointerup", onUp, { passive: true });
     document.addEventListener("pointerleave", onLeave);
     document.addEventListener("pointerenter", onEnter);
 
@@ -62,14 +66,14 @@ export default function Cursor() {
     document.documentElement.style.cursor = "none";
 
     return () => {
-      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerover", onOver);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       document.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("pointerenter", onEnter);
       document.documentElement.style.cursor = "";
     };
-  }, [enabled, x, y]);
+  }, [enabled]);
 
   if (!enabled) return null;
 
@@ -88,7 +92,10 @@ export default function Cursor() {
           zIndex: 10000,
           translateX: "-50%",
           translateY: "-50%",
-          mixBlendMode: "difference",
+          // Blending forces the compositor to read back whatever is beneath the
+          // ring on every frame it moves. Worth it on a machine with headroom;
+          // the first thing to go on one without.
+          mixBlendMode: high ? "difference" : "normal",
         }}
         animate={{
           width: size,
