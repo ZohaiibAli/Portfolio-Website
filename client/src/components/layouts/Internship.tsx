@@ -8,6 +8,7 @@ import Reveal from "@/components/fx/Reveal";
 import CountUp from "@/components/fx/CountUp";
 import Tag from "@/components/ui/Tag";
 import { EASE_OUT, VIEWPORT, alpha } from "@/lib/motion";
+import { INTERNSHIPS_COMPLETED, PROJECTS_SHIPPED } from "@/lib/profile";
 
 interface Entry {
   role: string;
@@ -68,8 +69,8 @@ const DOMAINS = [
 ];
 
 const STATS = [
-  { value: "2", label: "Internships completed", color: "#60A5FA" },
-  { value: "10+", label: "Projects shipped", color: "#34D399" },
+  { value: INTERNSHIPS_COMPLETED, label: "Internships completed", color: "#60A5FA" },
+  { value: PROJECTS_SHIPPED, label: "Projects shipped", color: "#34D399" },
   { value: "MERN", label: "Core stack expertise", color: "#22D3EE" },
 ];
 
@@ -268,8 +269,8 @@ const CARD_LINES: { label: string; value?: string; color: string; size: number; 
   { label: "Zohaib Ali", color: "#F1F5F9", size: 18, weight: 700, mono: false },
   { label: "Full Stack Developer Intern", color: "#60A5FA", size: 11, weight: 400, mono: true },
   { label: "University", value: "NED UET", color: "#94A3B8", size: 11.5, weight: 600, mono: false },
-  { label: "Internships", value: "2", color: "#94A3B8", size: 11.5, weight: 600, mono: false },
-  { label: "Projects Shipped", value: "10+", color: "#94A3B8", size: 11.5, weight: 600, mono: false },
+  { label: "Internships", value: INTERNSHIPS_COMPLETED, color: "#94A3B8", size: 11.5, weight: 600, mono: false },
+  { label: "Projects Shipped", value: PROJECTS_SHIPPED, color: "#94A3B8", size: 11.5, weight: 600, mono: false },
   { label: "React.js · Node.js · Express.js", color: "#34D399", size: 11, weight: 400, mono: true },
   { label: "MongoDB · PostgreSQL · REST APIs", color: "#60A5FA", size: 11, weight: 400, mono: true },
   { label: "WebSockets · H3 Geo · Tailwind CSS", color: "#7C3AED", size: 11, weight: 400, mono: true },

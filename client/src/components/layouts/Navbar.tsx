@@ -16,45 +16,134 @@ const NAV_HEIGHT = 68;
 
 /* ── Logo ─────────────────────────────────────────────────────────────── */
 
+/**
+ * Brand lockup: monogram chip + wordmark + role subline.
+ *
+ * The monogram is built as a gradient ring around a dark core rather than a
+ * tinted square with a flat border, so the mark reads as a physical object with
+ * a lit edge — the same treatment the section cards use, at 34px.
+ *
+ * Every hover response is opacity or transform: two stacked ring layers cross-
+ * fade instead of one ring animating its own gradient, and the underline is a
+ * `scaleX`. Nothing here repaints, which matters more than usual for an element
+ * that sits in a fixed bar over an animating backdrop for the whole session.
+ */
 function Logo({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
+  const [hovered, setHovered] = useState(false);
+  const reduced = useReducedMotion();
+  const lift = hovered && !reduced;
+
   return (
     <Magnetic strength={0.3}>
       <a
         href="#hero"
         onClick={onClick}
-        aria-label="Back to top"
-        className="flex select-none items-center gap-2.5"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        aria-label="Zohaib Ali — back to top"
+        className="flex select-none items-center gap-3"
         style={{ textDecoration: "none" }}
       >
+        {/* ── Monogram ─────────────────────────────────────────────────── */}
         <motion.span
-          className="grid place-items-center rounded-lg"
-          style={{
-            width: 30,
-            height: 30,
-            background: "linear-gradient(135deg, rgba(37,99,235,0.22), rgba(124,58,237,0.12))",
-            border: "1px solid rgba(96,165,250,0.28)",
-            fontFamily: "var(--font-mono)",
-            fontSize: 13,
-            fontWeight: 700,
-            color: "#60A5FA",
-          }}
-          whileHover={{ rotate: 90, scale: 1.08 }}
+          className="relative grid place-items-center"
+          style={{ width: 34, height: 34, flexShrink: 0 }}
+          animate={{ rotate: lift ? -6 : 0, scale: lift ? 1.08 : 1 }}
           transition={SPRING_SNAP}
         >
-          Z
+          {/* Resting ring — muted, always present. */}
+          <span
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{
+              borderRadius: 11,
+              background:
+                "linear-gradient(140deg, rgba(96,165,250,0.55) 0%, rgba(124,58,237,0.4) 52%, rgba(34,211,238,0.45) 100%)",
+            }}
+          />
+          {/* Lit ring — same geometry at full saturation, cross-faded on hover
+              so the edge brightens without repainting a gradient. */}
+          <motion.span
+            aria-hidden="true"
+            className="absolute inset-0"
+            style={{
+              borderRadius: 11,
+              background: "linear-gradient(140deg, #60A5FA 0%, #7C3AED 52%, #22D3EE 100%)",
+              boxShadow: "0 0 18px rgba(96,165,250,0.45)",
+            }}
+            animate={{ opacity: hovered ? 1 : 0 }}
+            transition={{ duration: 0.28, ease: EASE_OUT }}
+          />
+          {/* Core — inset by 1px, which is what turns the two layers above
+              into a ring rather than a filled tile. */}
+          <span
+            aria-hidden="true"
+            className="absolute"
+            style={{
+              inset: 1,
+              borderRadius: 10,
+              background: "linear-gradient(155deg, #0B1220 0%, #121B2C 100%)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.07)",
+            }}
+          />
+          <span
+            className="mono grad-text relative"
+            style={{ fontSize: 15, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1 }}
+          >
+            Z
+          </span>
         </motion.span>
-        <span
-          className="grad-text"
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: 15,
-            fontWeight: 800,
-            letterSpacing: "-0.04em",
-            whiteSpace: "nowrap",
-            filter: "drop-shadow(0 0 12px rgba(96,165,250,0.4))",
-          }}
-        >
-          Zohaib Ali
+
+        {/* ── Wordmark ─────────────────────────────────────────────────── */}
+        <span className="flex flex-col" style={{ gap: 2 }}>
+          <span className="relative">
+            <span
+              className="grad-text block"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 15.5,
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                whiteSpace: "nowrap",
+                lineHeight: 1.1,
+                filter: "drop-shadow(0 0 12px rgba(96,165,250,0.4))",
+              }}
+            >
+              Zohaib Ali
+            </span>
+            {/* Underline draws in from the left — transform only. */}
+            <motion.span
+              aria-hidden="true"
+              className="absolute left-0 block"
+              style={{
+                bottom: -2,
+                height: 1,
+                width: "100%",
+                transformOrigin: "left center",
+                background: "linear-gradient(90deg, #60A5FA, #22D3EE 55%, transparent)",
+              }}
+              initial={false}
+              animate={{ scaleX: lift ? 1 : 0 }}
+              transition={{ duration: 0.34, ease: EASE_OUT }}
+            />
+          </span>
+
+          {/* Colour handed to CSS rather than animated frame-by-frame in JS —
+              it's a paint either way, and the browser does it for free. */}
+          <span
+            className="mono hidden sm:block"
+            style={{
+              fontSize: 8.5,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              whiteSpace: "nowrap",
+              lineHeight: 1,
+              color: hovered ? "#60A5FA" : "#3E4C5E",
+              transition: "color 280ms ease",
+            }}
+          >
+            full-stack developer
+          </span>
         </span>
       </a>
     </Magnetic>

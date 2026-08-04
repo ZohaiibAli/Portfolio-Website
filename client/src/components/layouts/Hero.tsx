@@ -14,6 +14,7 @@ import { LiveDot } from "@/components/fx/SectionHeading";
 import GlowButton from "@/components/ui/GlowButton";
 import { usePointer } from "@/lib/usePointer";
 import { EASE_OUT, EASE_SOFT, EASE_INOUT } from "@/lib/motion";
+import { INTERNSHIPS_COMPLETED, PROJECTS_SHIPPED } from "@/lib/profile";
 
 const ROLES = [
   "Full-Stack Developer",
@@ -449,8 +450,8 @@ export default function Hero() {
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 1.1, delay: 0.5, ease: EASE_SOFT }}
         >
-          <Metric label="Projects Shipped" value="6+" sub="full-stack builds" color="#34D399" delay={1.4} x="2%" y="10%" depth={26} px={px} py={py} />
-          <Metric label="Internships" value="2+" sub="full stack + frontend" color="#60A5FA" delay={1.55} x="92%" y="6%" depth={-20} px={px} py={py} />
+          <Metric label="Projects Shipped" value={PROJECTS_SHIPPED} sub="full-stack builds" color="#34D399" delay={1.4} x="2%" y="10%" depth={26} px={px} py={py} />
+          <Metric label="Internships" value={`${INTERNSHIPS_COMPLETED}+`} sub="full stack + frontend" color="#60A5FA" delay={1.55} x="92%" y="6%" depth={-20} px={px} py={py} />
           <Metric label="Hackathons" value="3" sub="top performer" color="#F59E0B" delay={1.7} x="90%" y="84%" depth={18} px={px} py={py} />
 
           <TiltCard max={10} lift={30} style={{ borderRadius: 16 }}>

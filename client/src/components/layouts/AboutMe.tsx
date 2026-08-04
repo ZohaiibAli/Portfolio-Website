@@ -8,12 +8,13 @@ import CountUp from "@/components/fx/CountUp";
 import { LiveDot, Pill } from "@/components/fx/SectionHeading";
 import Tag from "@/components/ui/Tag";
 import { EASE_INOUT, EASE_OUT, VIEWPORT, stagger } from "@/lib/motion";
+import { INTERNSHIPS_COMPLETED, PROJECTS_SHIPPED } from "@/lib/profile";
 
 const STACK = ["React.js", "TypeScript", "Node.js", "Express.js", "FastAPI", "MongoDB"];
 
 const STATS = [
-  { value: "2+", label: "Internships", color: "#60A5FA" },
-  { value: "6+", label: "Projects", color: "#34D399" },
+  { value: `${INTERNSHIPS_COMPLETED}+`, label: "Internships", color: "#60A5FA" },
+  { value: PROJECTS_SHIPPED, label: "Projects", color: "#34D399" },
   { value: "3+", label: "Tech Stacks", color: "#A78BFA" },
 ];
 
@@ -211,7 +212,7 @@ export default function AboutMe() {
                 />
                 <FloatingChip
                   emoji="🚀"
-                  title="6+ shipped"
+                  title={`${PROJECTS_SHIPPED} shipped`}
                   sub="projects"
                   color="#60A5FA"
                   position={{ bottom: -18, left: -18 }}

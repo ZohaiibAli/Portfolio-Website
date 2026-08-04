@@ -7,6 +7,7 @@ import Reveal from "@/components/fx/Reveal";
 import GlowButton from "@/components/ui/GlowButton";
 import Tag from "@/components/ui/Tag";
 import { EASE_OUT, SPRING_SOFT, VIEWPORT, alpha } from "@/lib/motion";
+import { PROJECTS_SHIPPED } from "@/lib/profile";
 
 interface Project {
   id: string;
@@ -538,11 +539,15 @@ export default function Projects() {
   return (
     <Section id="projects" label="Selected Work">
       <SectionHeading eyebrow="projects" title="Selected" accent="Work">
-        Real-world systems built for{" "}
+        {/* Says out loud that this is a subset. Without it, a grid of three
+            cards sits directly under a hero claiming ten-plus shipped, and a
+            visitor reads the gap as the number being inflated. Both figures
+            are derived, so adding a case study updates the sentence itself. */}
+        {PROJECTS.length} of {PROJECTS_SHIPPED} shipped builds — real-world systems made for{" "}
         <span style={{ color: "#94A3B8" }}>
           scale, reliability, and real users
-        </span>{" "}
-        — from geospatial marketplaces to RAG-powered assistants.
+        </span>
+        , from geospatial marketplaces to RAG-powered assistants.
       </SectionHeading>
 
       <div
