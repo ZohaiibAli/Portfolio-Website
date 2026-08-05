@@ -349,7 +349,11 @@ function ProjectCard({
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={VIEWPORT}
       transition={{ duration: 0.7, delay: index * 0.1, ease: EASE_OUT }}
-      className="h-full"
+      /* Flex, not `h-full`: as a flex item this div is stretched to the row's
+         height by the parent, and a percentage height on it would resolve
+         against the auto-height container instead. Its own display carries the
+         height down to the card. */
+      className="flex"
     >
       {/*
         Deliberately no 3D tilt here. `layoutId` measures bounding boxes, and a
@@ -698,15 +702,10 @@ export default function Projects() {
         , from geospatial marketplaces to RAG-powered assistants.
       </SectionHeading>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fill, minmax(min(100%, 310px), 1fr))",
-          gap: 22,
-          alignItems: "stretch",
-        }}
-      >
+      {/* `.card-grid` (index.css) rather than a grid: with four projects the
+          last row holds one card, and a grid would park it in column 1 with
+          two columns of empty space beside it. */}
+      <div className="card-grid">
         {PROJECTS.map((p, i) => (
           <ProjectCard
             key={p.id}

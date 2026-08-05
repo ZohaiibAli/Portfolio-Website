@@ -228,6 +228,52 @@
        translating slides the highlight against their motion. */
     animation: name-sweep 1.15s cubic-bezier(0.4, 0, 0.2, 1) 1.75s both;
   }
+
+  /*
+    ── Card grid ───────────────────────────────────────────────────────────
+    Flex, not `grid`, for one reason: a partly-filled last row.
+
+    `grid-template-columns: repeat(auto-fill, minmax(310px, 1fr))` sizes the
+    columns beautifully and then places a leftover card in column 1 — so four
+    projects read as three cards and one orphan hugging the left edge, with a
+    two-column gap of dead space beside it. Grid has no way to centre a short
+    final row: items go in tracks, and the tracks are already laid out.
+
+    Flex wrapping centres the last line for free. The cost is that flex cannot
+    count columns itself, so the breakpoints below are hand-stepped to land
+    where the old grid used to reflow — `Section` caps content at 1200px minus
+    `clamp(1.25rem, 5vw, 4rem)` of padding a side, which puts the 3-up
+    threshold at ~1080px of viewport and the 2-up one at ~720px. Basis and
+    max-width are the same value on purpose: the items are exactly one column
+    wide, never grow into the slack, and so a full row is indistinguishable
+    from the grid it replaced.
+  */
+  .card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 22px;
+  }
+
+  .card-grid > * {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  @media (min-width: 720px) {
+    .card-grid > * {
+      flex-basis: calc((100% - 22px) / 2);
+      max-width: calc((100% - 22px) / 2);
+    }
+  }
+
+  @media (min-width: 1080px) {
+    .card-grid > * {
+      flex-basis: calc((100% - 44px) / 3);
+      max-width: calc((100% - 44px) / 3);
+    }
+  }
 }
 
 @keyframes caret-blink {
