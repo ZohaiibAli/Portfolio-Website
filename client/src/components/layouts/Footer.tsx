@@ -171,7 +171,7 @@ export default function Footer() {
           <SocialButton
             icon={<IconGithub />}
             label="GitHub"
-            href="https://github.com/githubzohaib"
+            href="https://github.com/ZohaiibAli"
             hoverColor="#D7E5FB"
           />
         </div>
