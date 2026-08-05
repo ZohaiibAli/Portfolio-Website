@@ -51,7 +51,7 @@ Full Stack Developer and Software Engineering student at **NED University of Eng
 
 ```bash
 # Clone the repository
-git clone https://github.com/githubzohaib/<repo-name>.git
+git clone https://github.com/ZohaiibAli/<repo-name>.git
 cd <repo-name>
 
 # Install dependencies
@@ -67,7 +67,7 @@ npm run dev
 
 - **Email:** zohaibaliwork@gmail.com
 - **LinkedIn:** [linkedin.com/in/zohaib-ali-5251b328b](https://www.linkedin.com/in/zohaib-ali-5251b328b/)
-- **GitHub:** [github.com/githubzohaib](https://github.com/githubzohaib)
+- **GitHub:** [github.com/ZohaiibAli](https://github.com/ZohaiibAli)
 
 ---
 

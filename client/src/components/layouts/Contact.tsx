@@ -10,7 +10,7 @@ import { useHasFinePointer } from "@/lib/usePointer";
 import { EASE_BACK, EASE_OUT, VIEWPORT, alpha } from "@/lib/motion";
 
 const LINKS = [
-  { label: "GitHub", handle: "githubzohaib", icon: "⬡", color: "#60A5FA", href: "https://github.com/githubzohaib" },
+  { label: "GitHub", handle: "ZohaiibAli", icon: "⬡", color: "#60A5FA", href: "https://github.com/ZohaiibAli" },
   { label: "LinkedIn", handle: "Zohaib Ali", icon: "◈", color: "#22D3EE", href: "https://www.linkedin.com/in/zohaib-ali-5251b328b/" },
   { label: "Email", handle: "zohaibaliwork@gmail.com", icon: "◉", color: "#0EA5E9", href: "mailto:zohaibaliwork@gmail.com" },
 ];

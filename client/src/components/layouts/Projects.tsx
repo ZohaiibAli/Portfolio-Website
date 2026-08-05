@@ -719,7 +719,7 @@ export default function Projects() {
 
       <Reveal delay={0.1} className="mt-14 flex justify-center">
         <GlowButton
-          href="https://github.com/githubzohaib"
+          href="https://github.com/ZohaiibAli"
           variant="ghost"
           external
         >
