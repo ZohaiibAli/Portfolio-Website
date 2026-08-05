@@ -30,8 +30,9 @@ interface Project {
   github: string | null;
 }
 
-/* Order matches the resume — HelpGhar → AI Dataset Cleaner → CodeChronicle —
-   with ServiceHub last, since it is the one build the resume doesn't list. */
+/* Order matches the resume — HelpGhar → AI Dataset Cleaner → CodeChronicle →
+   Student Performance Intelligence — with ServiceHub last, since it is the one
+   build the resume doesn't list. */
 const PROJECTS: Project[] = [
   {
     id: "helpghar",
@@ -94,6 +95,33 @@ const PROJECTS: Project[] = [
     icon: "◉",
     preview: "codechronicle",
     liveDemo: "https://living-system-architecture-48kw.vercel.app/",
+    github: null,
+  },
+  {
+    id: "student-performance",
+    name: "Student Performance Intelligence",
+    subtitle: "Explainable ML Prediction Workbench",
+    year: "2026",
+    description:
+      "Full-stack ML workbench that predicts student outcomes from a 1M-record dataset, explains every prediction with exact Shapley values, and audits its own features for statistical signal — reporting that two of the three inputs carry no measurable information rather than quietly modelling noise.",
+    features: [
+      "Four-estimator model zoo — Extra Trees champion at R² 0.717 — every model scored on the same 30,000-row held-out split",
+      "Exact Shapley values over all 2ⁿ coalitions, so contributions sum to prediction − baseline with zero residual",
+      "Per-feature signal audit running Pearson, Spearman, mutual information and permutation importance side by side",
+      "Goal-seek, scenario comparison and CSV roster scoring over a documented FastAPI REST surface",
+    ],
+    gradient: "linear-gradient(135deg, #100a1e 0%, #180d2c 42%, #21123c 100%)",
+    accent: "#A78BFA",
+    tags: [
+      "React.js",
+      "TypeScript",
+      "FastAPI",
+      "scikit-learn",
+      "Explainable AI",
+    ],
+    icon: "◈",
+    preview: "student-performance",
+    liveDemo: "https://students-prediction-model.vercel.app/",
     github: null,
   },
   {
