@@ -94,7 +94,7 @@ const PROJECTS: Project[] = [
     tags: ["React.js", "FastAPI", "Python", "Code Intelligence", "Data Viz"],
     icon: "◉",
     preview: "codechronicle",
-    liveDemo: "https://living-system-architecture-48kw.vercel.app/",
+    liveDemo: "https://code-chronicle-repo.vercel.app/",
     github: null,
   },
   {
