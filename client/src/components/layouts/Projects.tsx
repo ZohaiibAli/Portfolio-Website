@@ -30,9 +30,9 @@ interface Project {
   github: string | null;
 }
 
-/* Order matches the resume — HelpGhar → AI Dataset Cleaner → CodeChronicle →
-   Student Performance Intelligence — with ServiceHub last, since it is the one
-   build the resume doesn't list. */
+/* Order matches the resume — HelpGhar → AI Dataset Cleaner → PinKaroo →
+   CodeChronicle → Student Performance Intelligence — with ServiceHub last,
+   since it is the one build the resume doesn't list. */
 const PROJECTS: Project[] = [
   {
     id: "helpghar",
@@ -74,6 +74,27 @@ const PROJECTS: Project[] = [
     icon: "◆",
     preview: "dataset-cleaner",
     liveDemo: "https://raw2ready-ai.streamlit.app/",
+    github: null,
+  },
+  {
+    id: "pinkaroo",
+    name: "PinKaroo",
+    subtitle: "Self-Hosted Uptime Monitoring",
+    year: "2026",
+    description:
+      "Free, self-hosted uptime monitor — register an account, add the URLs to watch, and a GitHub Actions cron job pings each one on schedule, recording status code, response time and uptime history on a live dashboard.",
+    features: [
+      "Per-monitor check intervals on a FastAPI + MongoDB backend, no queue or worker process",
+      "GitHub Actions cron drives every ping — the backend stays stateless between checks",
+      "Live dashboard with self-counting monitor cards that refetch right after each check",
+      "JWT-scoped accounts keep every user's monitors and history fully isolated",
+    ],
+    gradient: "linear-gradient(135deg, #0a0a1a 0%, #12122a 42%, #1a1a3a 100%)",
+    accent: "#818CF8",
+    tags: ["Next.js", "FastAPI", "MongoDB", "GitHub Actions"],
+    icon: "⬢",
+    preview: "pinkaroo",
+    liveDemo: "https://pin-karoo.vercel.app/",
     github: null,
   },
   {
